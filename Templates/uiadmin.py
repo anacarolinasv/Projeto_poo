@@ -187,14 +187,13 @@ class UIAdmin:
     def produto_inserir():
         print()
         print("── Inserir produto ─────────────────────────────────────")
-        id_produto = int(input("  Id:           "))
         descricao = input("  Descricao:    ")
         preco = float(input("  Preco:        "))
         estoque = int(input("  Estoque:      "))
         # Vincula o produto a uma categoria ja existente.
         id_categoria = int(input("  Id categoria: "))
-        View.produto_inserir(id_produto, descricao, preco, estoque, id_categoria)
-        print("✔  Produto inserido.")
+        novo_id = View.produto_inserir(descricao, preco, estoque, id_categoria)
+        print(f"✔  Produto inserido com id {novo_id}.")
 
     @staticmethod
     def produto_listar():

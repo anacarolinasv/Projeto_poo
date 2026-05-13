@@ -120,9 +120,12 @@ class View:
         CarrinhoServico().esvaziar(carrinho)
 
     @staticmethod
-    def produto_inserir(id_produto, descricao, preco, estoque, id_categoria):
-        p = Produto(id_produto, descricao, preco, estoque, id_categoria)
-        ProdutoDAO().Inserir(p)
+    def produto_inserir(descricao, preco, estoque, id_categoria):
+        dao = ProdutoDAO()
+        novo_id = dao.Proximo_id()
+        p = Produto(novo_id, descricao, preco, estoque, id_categoria)
+        dao.Inserir(p)
+        return novo_id
 
     @staticmethod
     def produto_atualizar(id_produto, descricao, preco, estoque, id_categoria):
