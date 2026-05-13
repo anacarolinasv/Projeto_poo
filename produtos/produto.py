@@ -97,7 +97,13 @@ class ProdutoDAO:
             if produto.get_id() == id: # se o id do produto for igual ao id passado
                 return produto # retornar o produto
         return None # se o produto não for encontrado, retornar None
-    
+
+    def Proximo_id(self):
+        self.Abrir()  # Garante lista atualizada a partir do JSON antes de calcular o proximo id livre.
+        if not self.produtos: # Arquivo vazio ou sem produtos: primeiro cadastro usa id 1.
+            return 1
+        return max(p.get_id() for p in self.produtos) + 1  # Pega o maior id ja usado e soma 1.
+
     def Atualizar(self, obj):
         self.Abrir()
         produto = self.Listar_id(obj.get_id()) # retornar o produto pelo id
