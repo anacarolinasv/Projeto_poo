@@ -19,9 +19,16 @@ class UICliente:
         print("│  CARRINHO                                            │")
         print("│     3  Visualizar carrinho                           │")
         print("│     4  Comprar carrinho                              │")
+        print("│    10  Remover produto do carrinho                   │")
+        print("│    11  Esvaziar carrinho                             │")
         print("│                                                      │")
         print("│  HISTORICO                                           │")
         print("│     5  Listar minhas compras                         │")
+        print("│                                                      │")
+        print("│  FAVORITOS                                           │")
+        print("│     6  Listar meus favoritos                         │")
+        print("│     7  Favoritar produto                             │")
+        print("│     8  Remover produto dos favoritos                 │")
         print("│                                                      │")
         print("│  SESSAO                                              │")
         print("│     9  Sair                                          │")
@@ -43,8 +50,18 @@ class UICliente:
         elif op == 4:
             # Finaliza venda para este id_cliente e esvazia carrinho conforme View.
             UICliente._comprar_carrinho(carrinho, id_cliente)
+        elif op == 10:
+            UICliente._remover_do_carrinho(carrinho)
+        elif op == 11:
+            UICliente._esvaziar_carrinho(carrinho)
         elif op == 5:
             UICliente._listar_minhas_compras(id_cliente)
+        elif op == 6:
+            UICliente._listar_favoritos(id_cliente)
+        elif op == 7:
+            UICliente._favoritar_produto(id_cliente)
+        elif op == 8:
+            UICliente._remover_favorito(id_cliente)
         elif op == 9:
             # Sinal para ui.py encerrar sessao (usuario_sair).
             return 9
@@ -102,6 +119,34 @@ class UICliente:
         print(f"  Valor total do carrinho: R$ {total_carrinho:.2f}")
 
     @staticmethod
+    def _remover_do_carrinho(carrinho):
+        print()
+        print("── Remover produto do carrinho ─────────────────────────")
+        try:
+            id_produto = int(input("  Id do produto a remover: "))
+            View.carrinho_remover_item(carrinho, id_produto)
+            print("✔  Item removido do carrinho.")
+        except ValueError as e:
+            print(f"✖  {e}")
+        except Exception as e:
+            print(f"✖  {e}")
+
+    @staticmethod
+    def _esvaziar_carrinho(carrinho):
+        print()
+        print("── Esvaziar carrinho ───────────────────────────────────")
+        if not carrinho:
+            print("ℹ  Carrinho ja estava vazio.")
+            return
+        try:
+            View.carrinho_esvaziar(carrinho)
+            print("✔  Carrinho vazio.")
+        except ValueError as e:
+            print(f"✖  {e}")
+        except Exception as e:
+            print(f"✖  {e}")
+
+    @staticmethod
     def _comprar_carrinho(carrinho, id_cliente):
         print()
         print("── Finalizar compra ────────────────────────────────────")
@@ -120,3 +165,44 @@ class UICliente:
         registros = View.cliente_vendas_com_itens(id_cliente)
         # mostrar_cliente=False porque o proprio usuario ja sabe quem e.
         imprimir_vendas_com_itens(registros, "Minhas compras", mostrar_cliente=False)
+
+    @staticmethod
+    def _listar_favoritos(id_cliente):
+        print()
+        print("── Meus favoritos ──────────────────────────────────────")
+        try:
+            lista = View.cliente_favoritos_listar_produtos(id_cliente)
+        except ValueError as e:
+            print(f"✖  {e}")
+            return
+        if not lista:
+            print("ℹ  Voce ainda nao favoritou nenhum produto (ou os itens foram removidos do catalogo).")
+            return
+        for p in lista:
+            print(f"  {p}")
+
+    @staticmethod
+    def _favoritar_produto(id_cliente):
+        print()
+        print("── Favoritar produto ───────────────────────────────────")
+        try:
+            id_produto = int(input("  Id do produto: "))
+            View.cliente_favorito_adicionar(id_cliente, id_produto)
+            print("✔  Produto adicionado aos favoritos.")
+        except ValueError as e:
+            print(f"✖  {e}")
+        except Exception as e:
+            print(f"✖  {e}")
+
+    @staticmethod
+    def _remover_favorito(id_cliente):
+        print()
+        print("── Remover dos favoritos ───────────────────────────────")
+        try:
+            id_produto = int(input("  Id do produto: "))
+            View.cliente_favorito_remover(id_cliente, id_produto)
+            print("✔  Produto removido dos favoritos.")
+        except ValueError as e:
+            print(f"✖  {e}")
+        except Exception as e:
+            print(f"✖  {e}")
