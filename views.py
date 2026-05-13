@@ -10,6 +10,7 @@ from negocio.autenticacao_servico import AutenticacaoServico
 from negocio.carrinho_servico import CarrinhoServico
 from negocio.checkout_servico import CheckoutServico
 from negocio.venda_relatorio_servico import VendaRelatorioServico
+from negocio.favoritos_servico import FavoritosServico
 
 
 class View:
@@ -111,6 +112,14 @@ class View:
         return CarrinhoServico().montar_resumo(carrinho)
 
     @staticmethod
+    def carrinho_remover_item(carrinho, id_produto):
+        CarrinhoServico().remover_item(carrinho, id_produto)
+
+    @staticmethod
+    def carrinho_esvaziar(carrinho):
+        CarrinhoServico().esvaziar(carrinho)
+
+    @staticmethod
     def produto_inserir(id_produto, descricao, preco, estoque, id_categoria):
         p = Produto(id_produto, descricao, preco, estoque, id_categoria)
         ProdutoDAO().Inserir(p)
@@ -149,3 +158,15 @@ class View:
     def venda_listar():
         # Cabecalhos de venda sem expandir itens (uso direto do VendaDAO se a UI precisar).
         return VendaDAO().Listar()
+
+    @staticmethod
+    def cliente_favorito_adicionar(id_cliente, id_produto):
+        FavoritosServico().favoritar(id_cliente, id_produto)
+
+    @staticmethod
+    def cliente_favorito_remover(id_cliente, id_produto):
+        FavoritosServico().desfavoritar(id_cliente, id_produto)
+
+    @staticmethod
+    def cliente_favoritos_listar_produtos(id_cliente):
+        return FavoritosServico().listar_produtos_favoritos(id_cliente)

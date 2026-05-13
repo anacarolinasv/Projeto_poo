@@ -27,6 +27,20 @@ class CarrinhoServico:
         # Atualiza ou cria a entrada: mesmo id_produto agrega quantidade.
         carrinho[id_produto] = ja + quantidade
 
+    def remover_item(self, carrinho, id_produto):
+        """Remove a linha do produto (toda a quantidade) do carrinho em memoria."""
+        if not isinstance(carrinho, dict):
+            raise TypeError("Carrinho invalido.")
+        if id_produto not in carrinho:
+            raise ValueError("Este produto nao esta no carrinho.")
+        del carrinho[id_produto]
+
+    def esvaziar(self, carrinho):
+        """Remove todos os itens do carrinho."""
+        if not isinstance(carrinho, dict):
+            raise TypeError("Carrinho invalido.")
+        carrinho.clear()
+
     def montar_resumo(self, carrinho):
         """Retorna (linhas, total_carrinho). Cada linha: id, descricao, preco_unitario, quantidade, total_item."""
         dao = ProdutoDAO()
