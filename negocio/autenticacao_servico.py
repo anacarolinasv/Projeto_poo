@@ -1,19 +1,14 @@
-# DAO do administrador: busca por login no JSON (credenciais admin).
 from administradores.administrador import AdministradorDAO
-# DAO do cliente: busca por e-mail no cadastro de clientes.
 from clientes.cliente import ClienteDAO
 
-
-class AutenticacaoServico:
-    """Regras de autenticacao (camada de negocio)."""
-
+class AutenticacaoServico: # caso de uso: autenticar um administrador ou cliente
+    #--------- Constructor ---------#
     def __init__(self):
-        # Duas fontes de usuario: perfil admin e perfil cliente.
-        self._dao_admin = AdministradorDAO()
-        self._dao_cliente = ClienteDAO()
+        self._dao_admin = AdministradorDAO() # DAO encapsula leitura/gravacao em administradores.json (lista de administradores)
+        self._dao_cliente = ClienteDAO() # DAO encapsula leitura/gravacao em clientes.json (lista de clientes)
 
-    def login_admin(self, login, senha):
-        # Nao aceita login ou senha em branco (evita consulta inutil e mensagens ambiguas).
+    def login_admin(self, login, senha): # autenticar um administrador
+        # Nao aceita login ou senha em branco, levanta um erro.
         if not (login or "").strip() or not (senha or "").strip():
             raise ValueError("Login ou senha invalidos.")
         # Buscar_por_login rele o arquivo e compara login em minusculas (ver AdministradorDAO).
@@ -23,15 +18,17 @@ class AutenticacaoServico:
             raise ValueError("Login ou senha invalidos.")
         return adm
 
-    def login_cliente(self, email, senha):
+    def login_cliente(self, email, senha): # autenticar um cliente
+        # Nao aceita email ou senha em branco, levanta um erro.
         if not (email or "").strip() or not (senha or "").strip():
             raise ValueError("Email ou senha invalidos.")
-        # Localiza cliente pelo e-mail cadastrado (chave logica do sistema).
-        c = self._dao_cliente.Listar_por_email(email)
-        # Conta inexistente ou registro sem senha tratados como falha de login generica.
-        if c is None or c.get_senha() == "":
+
+        c = self._dao_cliente.Listar_por_email(email) # buscar um cliente pelo email
+
+        if c is None or c.get_senha() == "": # se o cliente não for encontrado ou a senha estiver em branco, levanta um erro
             raise ValueError("Email ou senha invalidos.")
-        # Comparacao literal da senha armazenada (sem hash neste projeto didatico).
-        if c.get_senha() != senha:
+
+        if c.get_senha() != senha: # se a senha do cliente for diferente da senha passada, levanta um erro
             raise ValueError("Email ou senha invalidos.")
-        return c
+        # Se a senha do cliente for igual à senha passada, retorna o cliente
+        return c 

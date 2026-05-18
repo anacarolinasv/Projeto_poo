@@ -92,31 +92,31 @@ class ClienteDAO:
                 return cliente # retornar o cliente
         return None # se o cliente não for encontrado, retornar None
 
-    def Listar_por_email(self, email):
+    def Listar_por_email(self, email): # retornar um cliente pelo email
         self.Abrir()
-        alvo = (email or "").strip().lower()
-        for cliente in self.cliente:
-            if cliente.get_email().strip().lower() == alvo:
-                return cliente
-        return None
+        alvo = (email or "").strip().lower() # normaliza o email
+        for cliente in self.cliente: # para cada cliente na lista
+            if cliente.get_email().strip().lower() == alvo: # se o email do cliente for igual ao email passado
+                return cliente # retornar o cliente
+        return None # se o cliente não for encontrado, retornar None
 
-    def Proximo_id(self):
+    def Proximo_id(self): # retornar o próximo id disponível
         self.Abrir()
-        if not self.cliente:
+        if not self.cliente: # se a lista de clientes estiver vazia, retornar 1
             return 1
-        return max(c.get_id() for c in self.cliente) + 1
+        return max(c.get_id() for c in self.cliente) + 1 # retornar o próximo id disponível
 
-    def Atualizar(self, obj):
+    def Atualizar(self, obj): # atualizar um cliente
         self.Abrir()
-        x = self.Listar_id(obj.get_id())
-        if x is not None:
-            x.set_nome(obj.get_nome())
-            x.set_email(obj.get_email())
-            x.set_fone(obj.get_fone())
-            x.set_senha(obj.get_senha())
-            self.Salvar()
-            return True
-        return False
+        x = self.Listar_id(obj.get_id()) # retornar um cliente pelo id
+        if x is not None: # se o cliente for encontrado, atualizar o cliente
+            x.set_nome(obj.get_nome()) # atualizar o nome do cliente
+            x.set_email(obj.get_email()) # atualizar o email do cliente
+            x.set_fone(obj.get_fone()) # atualizar o telefone do cliente
+            x.set_senha(obj.get_senha()) # atualizar a senha do cliente
+            self.Salvar() # salvar a lista de clientes no arquivo clientes.json
+            return True # retornar True se o cliente foi atualizado
+        return False # retornar False se o cliente não foi atualizado
     
     def Deletar(self, id): # deletar um cliente pelo id
         self.Abrir() # abrir o arquivo clientes.json e carregar os dados na lista de clientes

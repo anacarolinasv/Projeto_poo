@@ -1,23 +1,17 @@
-# Modelo Cliente (entidade) e ClienteDAO (persistencia em JSON).
 from clientes.cliente import Cliente, ClienteDAO
 
+class AbrirContaServico: # caso de uso: visitante abre conta para passar a ser cliente cadastrado
 
-class AbrirContaServico:
-    """Caso de uso: visitante abre conta para passar a ser cliente cadastrado."""
-
+    #--------- Constructor ---------#
     def __init__(self):
-        # DAO encapsula leitura/gravacao em clientes.json (lista de clientes).
-        self._dao = ClienteDAO()
+        self._dao = ClienteDAO() # DAO encapsula leitura/gravacao em clientes.json (lista de clientes)
 
-    def abrir_conta(self, nome, email, fone, senha, senha_confirmacao):
-        # Normaliza strings: None vira "" e remove espacos nas pontas (nome, email, fone).
-        nome = (nome or "").strip()
-        email = (email or "").strip()
-        fone = (fone or "").strip()
-        # Senhas nao recebem strip aqui: espacos no meio/fim podem ser intencionais no cadastro.
-        senha = senha or ""
-        senha_confirmacao = senha_confirmacao or ""
-        # Campos obrigatorios apos normalizacao (string vazia = nao preenchido).
+    def abrir_conta(self, nome, email, fone, senha, senha_confirmacao): # abrir conta
+        nome = (nome or "").strip() # normaliza o nome
+        email = (email or "").strip() # normaliza o email
+        fone = (fone or "").strip() # normaliza o telefone
+        senha = senha or "" # normaliza a senha
+        senha_confirmacao = senha_confirmacao or "" # normaliza a senha de confirmação
         if not nome:
             raise ValueError("Nome e obrigatorio.")
         if not email:

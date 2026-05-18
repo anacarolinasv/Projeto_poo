@@ -86,9 +86,9 @@ class VendaItemDAO:
             return 1
         return max(x.get_id() for x in self.vendaItem) + 1
 
-    def Listar_por_venda(self, id_venda):
+    def Listar_por_venda(self, id_venda): # retornar a lista de itens de venda pelo id da venda
         self.Abrir()
-        return [x for x in self.vendaItem if x.get_idVenda() == id_venda]
+        return [x for x in self.vendaItem if x.get_idVenda() == id_venda] # retornar a lista de itens de venda pelo id da venda
 
     def Abrir(self): # abrir o arquivo vendaItem.json e carregar os dados na lista de itens de venda
         try: # vai tentar:

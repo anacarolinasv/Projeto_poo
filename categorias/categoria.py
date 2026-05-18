@@ -41,13 +41,6 @@ class CategoriaDAO:
         with open('categorias/categorias.json' ,mode ='w') as arquivo: # abrir o arquivo categorias.json em modo escrita
             json.dump(self.categorias, arquivo, default= vars) # salvar a lista de categorias no arquivo categorias.json
     
-    def Inserir(self, obj):
-        self.Abrir() # carregar categorias existentes antes de inserir
-        if self.Listar_id(obj.get_id()) is not None:
-            raise ValueError("Ja existe categoria com esse id")
-        self.categor1ias.append(obj) # adiciona o objeto na lista
-        self.Salvar() # salvar a lista de categorias no arquivo categorias.json
-    
     def Abrir(self): # abrir o arquivo categorias.json e carregar os dados na lista de categorias
         try: # vai tentar:
             with open('categorias/categorias.json' ,mode ='r') as arquivo: # abrir o arquivo categorias.json em modo leitura
@@ -58,6 +51,13 @@ class CategoriaDAO:
                     self.categorias.append(c) # adicionar o objeto na lista
         except FileNotFoundError: # se o arquivo não for encontrado, limpar a lista de categorias
             self.categorias = [] # limpar a lista de categorias
+    
+    def Inserir(self, obj):
+        self.Abrir() # carregar categorias existentes antes de inserir
+        if self.Listar_id(obj.get_id()) is not None:
+            raise ValueError("Ja existe categoria com esse id")
+        self.categor1ias.append(obj) # adiciona o objeto na lista
+        self.Salvar() # salvar a lista de categorias no arquivo categorias.json
 
     def Listar(self): # retornar a lista de categorias
         self.Abrir() # abrir o arquivo categorias.json e carregar os dados na lista de categorias
