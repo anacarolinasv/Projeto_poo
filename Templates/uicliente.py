@@ -1,208 +1,218 @@
-# Fachada: orquestra servicos de produto, carrinho, checkout, listagens.
 from views import View
-# Funcao que formata e imprime vendas com itens (reutilizada no admin tambem).
 from Templates.relatorio_vendas import imprimir_vendas_com_itens
+from Templates.estilo_terminal import (
+    erro,
+    imprimir_caixa_menu,
+    info,
+    linha_formulario,
+    ok,
+    prompt_opcao,
+    rotulo,
+) # importa as funcoes do arquivo estilo_terminal.py
 
 
-class UICliente:
-    """Menu do perfil cliente (classe estatica, mesmo padrao do material)."""
+class UICliente: # classe estatica para o menu do perfil cliente
 
     @staticmethod
-    def menu(carrinho, id_cliente):
+    def menu(carrinho, id_cliente): # metodo estatico para o menu do perfil cliente
         # Quadro de opcoes: loja, carrinho, historico e saida (9 devolvido ao caller).
-        print("┌──────────────────── MENU CLIENTE ────────────────────┐")
-        print("│                                                      │")
-        print("│  LOJA                                                │")
-        print("│     1  Listar produtos                               │")
-        print("│     2  Inserir produto no carrinho                   │")
-        print("│                                                      │")
-        print("│  CARRINHO                                            │")
-        print("│     3  Visualizar carrinho                           │")
-        print("│     4  Comprar carrinho                              │")
-        print("│    10  Remover produto do carrinho                   │")
-        print("│    11  Esvaziar carrinho                             │")
-        print("│                                                      │")
-        print("│  HISTORICO                                           │")
-        print("│     5  Listar minhas compras                         │")
-        print("│                                                      │")
-        print("│  FAVORITOS                                           │")
-        print("│     6  Listar meus favoritos                         │")
-        print("│     7  Favoritar produto                             │")
-        print("│     8  Remover produto dos favoritos                 │")
-        print("│                                                      │")
-        print("│  SESSAO                                              │")
-        print("│     9  Sair                                          │")
-        print("│                                                      │")
-        print("└──────────────────────────────────────────────────────┘")
+        grupos = [
+            (None, []),
+            ("LOJA", [(1, "Listar produtos"), (2, "Inserir produto no carrinho")]),
+            (None, []),
+            (
+                "CARRINHO",
+                [
+                    (3, "Visualizar carrinho"),
+                    (4, "Comprar carrinho"),
+                    (10, "Remover produto do carrinho"),
+                    (11, "Esvaziar carrinho"),
+                ],
+            ),
+            (None, []),
+            ("HISTORICO", [(5, "Listar minhas compras")]),
+            (None, []),
+            (
+                "FAVORITOS",
+                [
+                    (6, "Listar meus favoritos"),
+                    (7, "Favoritar produto"),
+                    (8, "Remover produto dos favoritos"),
+                ],
+            ),
+            (None, []),
+            ("SESSAO", [(9, "Sair")]),
+        ]
+        imprimir_caixa_menu(" MENU CLIENTE ", grupos) # imprime o menu do perfil cliente
         try:
-            op = int(input("❯ Informe uma opcao: "))
+            op = int(input(prompt_opcao())) # le a opcao do usuario
         except ValueError:
             # Entrada nao numerica: retorna None (loop em ui.py continua no menu logado).
-            print("✖  Opcao invalida.")
-            return None
-        if op == 1:
+            print(erro("✖  Opcao invalida.")) # imprime uma mensagem de erro se a opcao do usuario for invalida
+            return None # retorna None se a opcao do usuario for invalida
+
+        if op == 1: # se a opcao do usuario for 1, chama o metodo _listar_produtos
             UICliente._listar_produtos()
-        elif op == 2:
+        elif op == 2: # se a opcao do usuario for 2, chama o metodo _inserir_carrinho
             # carrinho e o mesmo dict mutavel mantido em UI.__carrinho.
-            UICliente._inserir_carrinho(carrinho)
-        elif op == 3:
-            UICliente._visualizar_carrinho(carrinho)
+            UICliente._inserir_carrinho(carrinho, id_cliente)
+        elif op == 3: # se a opcao do usuario for 3, chama o metodo _visualizar_carrinho
+            UICliente._visualizar_carrinho(carrinho, id_cliente)
         elif op == 4:
             # Finaliza venda para este id_cliente e esvazia carrinho conforme View.
             UICliente._comprar_carrinho(carrinho, id_cliente)
-        elif op == 10:
-            UICliente._remover_do_carrinho(carrinho)
-        elif op == 11:
-            UICliente._esvaziar_carrinho(carrinho)
-        elif op == 5:
+        elif op == 10: # se a opcao do usuario for 10, chama o metodo _remover_do_carrinho
+            UICliente._remover_do_carrinho(carrinho, id_cliente)
+        elif op == 11: # se a opcao do usuario for 11, chama o metodo _esvaziar_carrinho
+            UICliente._esvaziar_carrinho(carrinho, id_cliente)
+        elif op == 5: # se a opcao do usuario for 5, chama o metodo _listar_minhas_compras
             UICliente._listar_minhas_compras(id_cliente)
-        elif op == 6:
+        elif op == 6: # se a opcao do usuario for 6, chama o metodo _listar_favoritos
             UICliente._listar_favoritos(id_cliente)
-        elif op == 7:
+        elif op == 7: # se a opcao do usuario for 7, chama o metodo _favoritar_produto
             UICliente._favoritar_produto(id_cliente)
-        elif op == 8:
+        elif op == 8: # se a opcao do usuario for 8, chama o metodo _remover_favorito
             UICliente._remover_favorito(id_cliente)
-        elif op == 9:
-            # Sinal para ui.py encerrar sessao (usuario_sair).
-            return 9
-        else:
-            print("✖  Opcao invalida.")
+        elif op == 9: # se a opcao do usuario for 9, retorna 9
+            return 9 # retorna 9 se a opcao do usuario for 9
+        else: # se a opcao do usuario for invalida, imprime uma mensagem de erro
+            print(erro("✖  Opcao invalida.")) # imprime uma mensagem de erro se a opcao do usuario for invalida
         # Qualquer opcao exceto 9: caller trata como "continuar logado".
-        return None
+        return None # retorna None se a opcao do usuario for invalida
 
     @staticmethod
-    def _listar_produtos():
-        print()
-        print("── Produtos a venda (estoque > 0) ──────────────────────")
+    def _listar_produtos(): # metodo estatico para listar os produtos disponiveis para venda
+        linha_formulario("Produtos a venda (estoque > 0)") # imprime o titulo do formulario de listagem de produtos disponiveis para venda
         # View filtra produtos que podem ser vendidos (ex.: estoque positivo).
-        lista = View.produtos_disponiveis_venda()
+        lista = View.produtos_disponiveis_venda() # chama o metodo produtos_disponiveis_venda da classe View
         if not lista:
-            print("ℹ  Nenhum produto disponivel para venda no momento.")
-            return
+            print(info("ℹ  Nenhum produto disponivel para venda no momento.")) # imprime uma mensagem de informacao se a lista de produtos disponiveis para venda for vazia
+            return # retorna None se a lista de produtos disponiveis para venda for vazia
         for p in lista:
             # __str__ ou representacao do objeto produto para exibir na tela.
-            print(f"  {p}")
+            print(f"  {p}") # imprime o objeto produto
 
     @staticmethod
-    def _inserir_carrinho(carrinho):
-        print()
-        print("── Inserir produto no carrinho ─────────────────────────")
+    def _inserir_carrinho(carrinho, id_cliente): # metodo estatico para inserir um produto no carrinho
+        linha_formulario("Inserir produto no carrinho") # imprime o titulo do formulario de insercao de produto no carrinho
         try:
-            id_produto = int(input("  Id do produto: "))
-            quantidade = int(input("  Quantidade:    "))
+            id_produto = int(input("  Id do produto: ")) # le o id do produto a ser inserido no carrinho
+            quantidade = int(input("  Quantidade:    ")) # le a quantidade do produto a ser inserido no carrinho
             # Atualiza o dict carrinho (agrega quantidade ou valida estoque).
-            View.carrinho_adicionar_item(carrinho, id_produto, quantidade)
-            print("✔  Carrinho atualizado.")
+            View.carrinho_adicionar_item(carrinho, id_produto, quantidade) # chama o metodo carrinho_adicionar_item da classe View
+            View.cliente_carrinho_sincronizar(id_cliente, carrinho) # chama o metodo cliente_carrinho_sincronizar da classe View
+            print(ok("✔  Carrinho atualizado.")) # imprime uma mensagem de sucesso se o carrinho foi atualizado
         except ValueError as e:
             # Erros de validacao (produto inexistente, quantidade invalida, etc.).
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
         except Exception as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro
 
     @staticmethod
-    def _visualizar_carrinho(carrinho):
-        print()
-        print("── Carrinho ────────────────────────────────────────────")
+    def _visualizar_carrinho(carrinho, id_cliente): # metodo estatico para visualizar o carrinho
+        linha_formulario("Carrinho") # imprime o titulo do formulario de visualizacao de carrinho
         # linhas: lista de dicts com id, descricao, preco_unitario, quantidade, total_item.
-        linhas, total_carrinho = View.carrinho_resumo(carrinho)
-        if not linhas:
-            print("ℹ  Carrinho vazio.")
-            return
+        linhas, total_carrinho = View.carrinho_resumo(carrinho) # chama o metodo carrinho_resumo da classe View
+        View.cliente_carrinho_sincronizar(id_cliente, carrinho) # chama o metodo cliente_carrinho_sincronizar da classe View        
+        if not linhas: 
+            print(info("ℹ  Carrinho vazio.")) # imprime uma mensagem de informacao se o carrinho for vazio              
+            return # retorna None se o carrinho for vazio
         for L in linhas:
-            print(f"  [{L['id']}] {L['descricao']}")
+            print(f"  [{L['id']}] {L['descricao']}") # imprime o id e a descricao do produto
             print(
-                f"      Preco unit.: R$ {L['preco_unitario']:.2f}   "
-                f"Qtd: {L['quantidade']}   "
-                f"Total item: R$ {L['total_item']:.2f}"
+                f"      Preco unit.: R$ {L['preco_unitario']:.2f}   " # imprime o preco unitario do produto
+                f"Qtd: {L['quantidade']}   " # imprime a quantidade do produto
+                f"Total item: R$ {L['total_item']:.2f}" # imprime o total do item
             )
-        print()
-        print(f"  Valor total do carrinho: R$ {total_carrinho:.2f}")
+        print() # imprime uma linha em branco
+        print(rotulo(f"  Valor total do carrinho: R$ {total_carrinho:.2f}")) # imprime o valor total do carrinho
 
     @staticmethod
-    def _remover_do_carrinho(carrinho):
-        print()
-        print("── Remover produto do carrinho ─────────────────────────")
+    def _remover_do_carrinho(carrinho, id_cliente): # metodo estatico para remover um produto do carrinho       
+        linha_formulario("Remover produto do carrinho") # imprime o titulo do formulario de remocao de produto do carrinho
         try:
-            id_produto = int(input("  Id do produto a remover: "))
-            View.carrinho_remover_item(carrinho, id_produto)
-            print("✔  Item removido do carrinho.")
+            id_produto = int(input("  Id do produto a remover: ")) # le o id do produto a ser removido do carrinho
+            View.carrinho_remover_item(carrinho, id_produto) # chama o metodo carrinho_remover_item da classe View
+            View.cliente_carrinho_sincronizar(id_cliente, carrinho) # chama o metodo cliente_carrinho_sincronizar da classe View
+            print(ok("✔  Item removido do carrinho.")) # imprime uma mensagem de sucesso se o item foi removido do carrinho
         except ValueError as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
         except Exception as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro
 
     @staticmethod
-    def _esvaziar_carrinho(carrinho):
-        print()
-        print("── Esvaziar carrinho ───────────────────────────────────")
+    def _esvaziar_carrinho(carrinho, id_cliente): # metodo estatico para esvaziar o carrinho
+        linha_formulario("Esvaziar carrinho")
         if not carrinho:
-            print("ℹ  Carrinho ja estava vazio.")
-            return
+            print(info("ℹ  Carrinho ja estava vazio.")) # imprime uma mensagem de informacao se o carrinho ja estava vazio
+            return # retorna None se o carrinho ja estava vazio
         try:
-            View.carrinho_esvaziar(carrinho)
-            print("✔  Carrinho vazio.")
+            View.carrinho_esvaziar(carrinho) # chama o metodo carrinho_esvaziar da classe View
+            View.cliente_carrinho_sincronizar(id_cliente, carrinho) # chama o metodo cliente_carrinho_sincronizar da classe View
+            print(ok("✔  Carrinho vazio.")) # imprime uma mensagem de sucesso se o carrinho foi esvaziado
         except ValueError as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
         except Exception as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro
 
     @staticmethod
-    def _comprar_carrinho(carrinho, id_cliente):
-        print()
-        print("── Finalizar compra ────────────────────────────────────")
+    def _comprar_carrinho(carrinho, id_cliente): # metodo estatico para comprar o carrinho
+        linha_formulario("Finalizar compra")
         try:
             # Persiste venda e itens; esvazia carrinho em memoria conforme implementacao.
             View.comprar_carrinho(id_cliente, carrinho)
-            print("✔  Compra realizada com sucesso.")
-        except ValueError as e:
-            print(f"✖  {e}")
+            print(ok("✔  Compra realizada com sucesso.")) # imprime uma mensagem de sucesso se a compra foi realizada com sucesso
+        except ValueError as e: 
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
         except Exception as e:
-            print(f"✖  Erro ao finalizar compra: {e}")
+            print(erro(f"✖  Erro ao finalizar compra: {e}")) # imprime uma mensagem de erro se ocorrer um erro
 
     @staticmethod
-    def _listar_minhas_compras(id_cliente):
+    def _listar_minhas_compras(id_cliente): # metodo estatico para listar as compras do cliente
         # Busca vendas deste cliente com lista de itens para o relatorio.
         registros = View.cliente_vendas_com_itens(id_cliente)
         # mostrar_cliente=False porque o proprio usuario ja sabe quem e.
-        imprimir_vendas_com_itens(registros, "Minhas compras", mostrar_cliente=False)
+        imprimir_vendas_com_itens(registros, "Minhas compras", mostrar_cliente=False) # imprime as compras do cliente com os itens e o nome do cliente em cada bloco
 
     @staticmethod
-    def _listar_favoritos(id_cliente):
-        print()
-        print("── Meus favoritos ──────────────────────────────────────")
+    def _listar_favoritos(id_cliente): # metodo estatico para listar os favoritos do cliente
+        linha_formulario("Meus favoritos") # imprime o titulo do formulario de listagem de favoritos do cliente
         try:
-            lista = View.cliente_favoritos_listar_produtos(id_cliente)
+            lista = View.cliente_favoritos_listar_produtos(id_cliente) # chama o metodo cliente_favoritos_listar_produtos da classe View
         except ValueError as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
             return
         if not lista:
-            print("ℹ  Voce ainda nao favoritou nenhum produto (ou os itens foram removidos do catalogo).")
-            return
+            print(
+                info(
+                    "ℹ  Voce ainda nao favoritou nenhum produto "
+                    "(ou os itens foram removidos do catalogo)."
+                )
+            )
+            return # retorna None se a lista de favoritos for vazia                 
         for p in lista:
-            print(f"  {p}")
+            print(f"  {p}") # imprime o objeto produto
 
     @staticmethod
-    def _favoritar_produto(id_cliente):
-        print()
-        print("── Favoritar produto ───────────────────────────────────")
+    def _favoritar_produto(id_cliente): # metodo estatico para favoritar um produto 
+        linha_formulario("Favoritar produto")
         try:
-            id_produto = int(input("  Id do produto: "))
-            View.cliente_favorito_adicionar(id_cliente, id_produto)
-            print("✔  Produto adicionado aos favoritos.")
+            id_produto = int(input("  Id do produto: ")) # le o id do produto a ser favoritado
+            View.cliente_favorito_adicionar(id_cliente, id_produto) # chama o metodo cliente_favorito_adicionar da classe View
+            print(ok("✔  Produto adicionado aos favoritos.")) # imprime uma mensagem de sucesso se o produto foi adicionado aos favoritos
         except ValueError as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
         except Exception as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro
 
     @staticmethod
-    def _remover_favorito(id_cliente):
-        print()
-        print("── Remover dos favoritos ───────────────────────────────")
-        try:
-            id_produto = int(input("  Id do produto: "))
-            View.cliente_favorito_remover(id_cliente, id_produto)
-            print("✔  Produto removido dos favoritos.")
+    def _remover_favorito(id_cliente): # metodo estatico para remover um produto dos favoritos
+        linha_formulario("Remover dos favoritos") # imprime o titulo do formulario de remocao de produto dos favoritos
+        try:    
+            id_produto = int(input("  Id do produto: ")) # le o id do produto a ser removido dos favoritos
+            View.cliente_favorito_remover(id_cliente, id_produto) # chama o metodo cliente_favorito_remover da classe View
+            print(ok("✔  Produto removido dos favoritos.")) # imprime uma mensagem de sucesso se o produto foi removido dos favoritos
         except ValueError as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
         except Exception as e:
-            print(f"✖  {e}")
+            print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro

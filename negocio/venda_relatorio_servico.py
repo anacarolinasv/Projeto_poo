@@ -2,46 +2,43 @@ from vendas.venda import VendaDAO
 from vendas.vendaItem import VendaItemDAO
 from produtos.produto import ProdutoDAO
 
+class VendaRelatorioServico:  # caso de uso: montar vendas com itens
 
-class VendaRelatorioServico:
-    """Monta vendas com itens (para cliente e admin)."""
+    def _itens_detalhados(self, id_venda):  # itens ligados a esta venda; produtos buscados para mostrar descricao atual ou fallback.
 
-    def _itens_detalhados(self, id_venda):
-        # Itens ligados a esta venda; produtos buscados para mostrar descricao atual ou fallback.
-        idao = VendaItemDAO()
-        pdao = ProdutoDAO()
-        out = []
-        for it in idao.Listar_por_venda(id_venda):
-            p = pdao.Listar_id(it.get_idProduto())
-            # Se o produto foi excluido depois, ainda mostra a linha com texto fixo.
-            desc = p.get_descricao() if p else "(produto removido)"
-            q = int(it.get_quantidade())
-            # Preco gravado no item (historico), nao necessariamente o preco atual do catalogo.
-            pu = float(it.get_preco())
-            out.append(
+        venda_item_dao = VendaItemDAO()  # vendaItem.json
+        produto_dao = ProdutoDAO()  # produtos.json
+        itens_detalhados = []  # lista de itens detalhados para o relatorio
+
+        for item_venda in venda_item_dao.Listar_por_venda(id_venda): # para cada item na lista de itens de venda, buscar um produto pelo id
+
+            produto = produto_dao.Listar_id(item_venda.get_idProduto()) # buscar um produto pelo id
+            descricao = produto.get_descricao() if produto else "(produto removido)" # descrição do produto ou texto fixo se produto removido
+            quantidade = int(item_venda.get_quantidade()) # quantidade do item
+            preco_unitario = float(item_venda.get_preco()) # preço unitário do item
+            itens_detalhados.append(
                 {
-                    "id_produto": it.get_idProduto(),
-                    "descricao": desc,
-                    "quantidade": q,
-                    "preco_unitario": pu,
-                    "total_item": round(pu * q, 2),
+                    "id_produto": item_venda.get_idProduto(),
+                    "descricao": descricao,
+                    "quantidade": quantidade,
+                    "preco_unitario": preco_unitario,
+                    "total_item": round(preco_unitario * quantidade, 2), # total do item
                 }
-            )
-        return out
+            ) # adiciona o item detalhado na lista de itens detalhados
+        return itens_detalhados # retorna a lista de itens detalhados
 
-    def listar_por_cliente(self, id_cliente):
-        vdao = VendaDAO()
-        lst = []
-        # Ordena por id da venda para exibicao estavel (cronologia de cadastro dos ids).
-        for v in sorted(vdao.Listar_por_cliente(id_cliente), key=lambda x: x.get_id()):
-            # Cada elemento: objeto Venda + lista de dicts prontos para a UI/relatorio.
-            lst.append({"venda": v, "itens": self._itens_detalhados(v.get_id())})
-        return lst
+    def listar_por_cliente(self, id_cliente):  # listar vendas por cliente
 
-    def listar_todas(self):
-        vdao = VendaDAO()
-        lst = []
-        # Todas as vendas do sistema (uso tipico: painel administrador).
-        for v in sorted(vdao.Listar(), key=lambda x: x.get_id()):
-            lst.append({"venda": v, "itens": self._itens_detalhados(v.get_id())})
-        return lst
+        venda_dao = VendaDAO()  # DAO encapsula leitura/gravacao em vendas.json (lista de vendas)
+        vendas_com_itens = []  # lista de vendas com itens detalhados
+        
+        for venda in sorted(venda_dao.Listar_por_cliente(id_cliente), key=lambda venda: venda.get_id()): # para cada venda na lista de vendas, ordenar por id
+            vendas_com_itens.append({"venda": venda, "itens": self._itens_detalhados(venda.get_id())}) # adiciona a venda na lista de vendas com itens detalhados
+        return vendas_com_itens # retorna a lista de vendas com itens detalhados
+
+    def listar_todas(self):  # listar todas as vendas
+        venda_dao = VendaDAO()
+        vendas_com_itens = [] # lista de vendas com itens detalhados
+        for venda in sorted(venda_dao.Listar(), key=lambda venda: venda.get_id()): # para cada venda na lista de vendas, ordenar por id
+            vendas_com_itens.append({"venda": venda, "itens": self._itens_detalhados(venda.get_id())}) # adiciona a venda na lista de vendas com itens detalhados
+        return vendas_com_itens # retorna a lista de vendas com itens detalhados

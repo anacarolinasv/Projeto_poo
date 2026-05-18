@@ -12,5 +12,12 @@
     "carrinho": false,
     "total": 24.0,
     "idCliente": 1
+  },
+  {
+    "id": 3,
+    "data": "2026-05-18T11:40:49.817136",
+    "carrinho": false,
+    "total": 3.0,
+    "idCliente": 3
   }
 ]
