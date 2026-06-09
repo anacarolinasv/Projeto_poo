@@ -99,8 +99,8 @@ class UICliente: # classe estatica para o menu do perfil cliente
             id_produto = int(input("  Id do produto: ")) # le o id do produto a ser inserido no carrinho
             quantidade = int(input("  Quantidade:    ")) # le a quantidade do produto a ser inserido no carrinho
             # Atualiza o dict carrinho (agrega quantidade ou valida estoque).
-            View.carrinho_adicionar_item(carrinho, id_produto, quantidade) # chama o metodo carrinho_adicionar_item da classe View
-            View.cliente_carrinho_sincronizar(id_cliente, carrinho) # chama o metodo cliente_carrinho_sincronizar da classe View
+            View.adicionar(carrinho, id_produto, quantidade)
+            View.sincronizar(id_cliente, carrinho)
             print(ok("✔  Carrinho atualizado.")) # imprime uma mensagem de sucesso se o carrinho foi atualizado
         except ValueError as e:
             # Erros de validacao (produto inexistente, quantidade invalida, etc.).
@@ -112,8 +112,8 @@ class UICliente: # classe estatica para o menu do perfil cliente
     def _visualizar_carrinho(carrinho, id_cliente): # metodo estatico para visualizar o carrinho
         linha_formulario("Carrinho") # imprime o titulo do formulario de visualizacao de carrinho
         # linhas: lista de dicts com id, descricao, preco_unitario, quantidade, total_item.
-        linhas, total_carrinho = View.carrinho_resumo(carrinho) # chama o metodo carrinho_resumo da classe View
-        View.cliente_carrinho_sincronizar(id_cliente, carrinho) # chama o metodo cliente_carrinho_sincronizar da classe View        
+        linhas, total_carrinho = View.montar_resumo(carrinho)
+        View.sincronizar(id_cliente, carrinho)
         if not linhas: 
             print(info("ℹ  Carrinho vazio.")) # imprime uma mensagem de informacao se o carrinho for vazio              
             return # retorna None se o carrinho for vazio
@@ -132,8 +132,8 @@ class UICliente: # classe estatica para o menu do perfil cliente
         linha_formulario("Remover produto do carrinho") # imprime o titulo do formulario de remocao de produto do carrinho
         try:
             id_produto = int(input("  Id do produto a remover: ")) # le o id do produto a ser removido do carrinho
-            View.carrinho_remover_item(carrinho, id_produto) # chama o metodo carrinho_remover_item da classe View
-            View.cliente_carrinho_sincronizar(id_cliente, carrinho) # chama o metodo cliente_carrinho_sincronizar da classe View
+            View.remover_item(carrinho, id_produto)
+            View.sincronizar(id_cliente, carrinho)
             print(ok("✔  Item removido do carrinho.")) # imprime uma mensagem de sucesso se o item foi removido do carrinho
         except ValueError as e:
             print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
@@ -147,8 +147,8 @@ class UICliente: # classe estatica para o menu do perfil cliente
             print(info("ℹ  Carrinho ja estava vazio.")) # imprime uma mensagem de informacao se o carrinho ja estava vazio
             return # retorna None se o carrinho ja estava vazio
         try:
-            View.carrinho_esvaziar(carrinho) # chama o metodo carrinho_esvaziar da classe View
-            View.cliente_carrinho_sincronizar(id_cliente, carrinho) # chama o metodo cliente_carrinho_sincronizar da classe View
+            View.esvaziar(carrinho)
+            View.sincronizar(id_cliente, carrinho)
             print(ok("✔  Carrinho vazio.")) # imprime uma mensagem de sucesso se o carrinho foi esvaziado
         except ValueError as e:
             print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
@@ -160,7 +160,7 @@ class UICliente: # classe estatica para o menu do perfil cliente
         linha_formulario("Finalizar compra")
         try:
             # Persiste venda e itens; esvazia carrinho em memoria conforme implementacao.
-            View.comprar_carrinho(id_cliente, carrinho)
+            View.finalizar_compra(id_cliente, carrinho)
             print(ok("✔  Compra realizada com sucesso.")) # imprime uma mensagem de sucesso se a compra foi realizada com sucesso
         except ValueError as e: 
             print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
@@ -170,7 +170,7 @@ class UICliente: # classe estatica para o menu do perfil cliente
     @staticmethod
     def _listar_minhas_compras(id_cliente): # metodo estatico para listar as compras do cliente
         # Busca vendas deste cliente com lista de itens para o relatorio.
-        registros = View.cliente_vendas_com_itens(id_cliente)
+        registros = View.listar_por_cliente(id_cliente)
         # mostrar_cliente=False porque o proprio usuario ja sabe quem e.
         imprimir_vendas_com_itens(registros, "Minhas compras", mostrar_cliente=False) # imprime as compras do cliente com os itens e o nome do cliente em cada bloco
 
@@ -178,7 +178,7 @@ class UICliente: # classe estatica para o menu do perfil cliente
     def _listar_favoritos(id_cliente): # metodo estatico para listar os favoritos do cliente
         linha_formulario("Meus favoritos") # imprime o titulo do formulario de listagem de favoritos do cliente
         try:
-            lista = View.cliente_favoritos_listar_produtos(id_cliente) # chama o metodo cliente_favoritos_listar_produtos da classe View
+            lista = View.listar_produtos_favoritos(id_cliente)
         except ValueError as e:
             print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
             return
@@ -198,7 +198,7 @@ class UICliente: # classe estatica para o menu do perfil cliente
         linha_formulario("Favoritar produto")
         try:
             id_produto = int(input("  Id do produto: ")) # le o id do produto a ser favoritado
-            View.cliente_favorito_adicionar(id_cliente, id_produto) # chama o metodo cliente_favorito_adicionar da classe View
+            View.favoritar(id_cliente, id_produto)
             print(ok("✔  Produto adicionado aos favoritos.")) # imprime uma mensagem de sucesso se o produto foi adicionado aos favoritos
         except ValueError as e:
             print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao
@@ -210,7 +210,7 @@ class UICliente: # classe estatica para o menu do perfil cliente
         linha_formulario("Remover dos favoritos") # imprime o titulo do formulario de remocao de produto dos favoritos
         try:    
             id_produto = int(input("  Id do produto: ")) # le o id do produto a ser removido dos favoritos
-            View.cliente_favorito_remover(id_cliente, id_produto) # chama o metodo cliente_favorito_remover da classe View
+            View.desfavoritar(id_cliente, id_produto)
             print(ok("✔  Produto removido dos favoritos.")) # imprime uma mensagem de sucesso se o produto foi removido dos favoritos
         except ValueError as e:
             print(erro(f"✖  {e}")) # imprime uma mensagem de erro se ocorrer um erro de validacao

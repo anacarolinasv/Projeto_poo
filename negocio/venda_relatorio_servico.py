@@ -36,6 +36,9 @@ class VendaRelatorioServico:  # caso de uso: montar vendas com itens
             vendas_com_itens.append({"venda": venda, "itens": self._itens_detalhados(venda.get_id())}) # adiciona a venda na lista de vendas com itens detalhados
         return vendas_com_itens # retorna a lista de vendas com itens detalhados
 
+    def listar(self):  # listar vendas sem detalhar itens
+        return VendaDAO().Listar()
+
     def listar_todas(self):  # listar todas as vendas
         venda_dao = VendaDAO()
         vendas_com_itens = [] # lista de vendas com itens detalhados

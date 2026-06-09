@@ -56,7 +56,7 @@ class CategoriaDAO:
         self.Abrir() # carregar categorias existentes antes de inserir
         if self.Listar_id(obj.get_id()) is not None:
             raise ValueError("Ja existe categoria com esse id")
-        self.categor1ias.append(obj) # adiciona o objeto na lista
+        self.categorias.append(obj) # adiciona o objeto na lista
         self.Salvar() # salvar a lista de categorias no arquivo categorias.json
 
     def Listar(self): # retornar a lista de categorias

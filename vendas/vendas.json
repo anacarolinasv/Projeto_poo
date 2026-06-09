@@ -19,5 +19,26 @@
     "carrinho": false,
     "total": 3.0,
     "idCliente": 3
+  },
+  {
+    "id": 4,
+    "data": "2026-06-08T23:21:11.200044",
+    "carrinho": false,
+    "total": 29.99,
+    "idCliente": 1
+  },
+  {
+    "id": 5,
+    "data": "2026-06-08T23:31:02.372935",
+    "carrinho": false,
+    "total": 132.99,
+    "idCliente": 1
+  },
+  {
+    "id": 6,
+    "data": "2026-06-09T10:12:35.826265",
+    "carrinho": false,
+    "total": 97.0,
+    "idCliente": 4
   }
 ]

@@ -63,3 +63,4 @@ class CheckoutServico: # caso de uso: finalizar uma compra
             pdao.Atualizar(atualizado) # atualizar o produto na lista de produtos
 
         carrinho.clear() # esvaziar o carrinho
+        CarrinhoServico().sincronizar(id_cliente, carrinho)
