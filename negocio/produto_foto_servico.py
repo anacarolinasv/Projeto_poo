@@ -20,7 +20,7 @@ class ProdutoFotoServico:
     def salvar_foto(self, id_produto, arquivo):
         ext = (arquivo.name or "").rsplit(".", 1)[-1].lower()
         if ext not in self.EXTENSOES:
-            raise ValueError("Formato invalido. Use JPG, PNG ou WEBP.")
+            raise ValueError("Formato inválido. Use JPG, PNG ou WEBP.")
         self._garantir_dir()
         self.excluir_foto(id_produto)
         destino = self.FOTOS_DIR / f"{id_produto}.{ext}"

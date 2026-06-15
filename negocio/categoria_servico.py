@@ -16,7 +16,7 @@ class CategoriaServico:  # caso de uso: manter cadastro de categorias
     def atualizar(self, id_categoria, descricao):
         categoria = Categoria(id_categoria, descricao)
         if not self._dao.Atualizar(categoria):
-            raise ValueError("Categoria nao encontrada.")
+            raise ValueError("Categoria não encontrada.")
 
     def excluir(self, id_categoria):
         return self._dao.Excluir(id_categoria)

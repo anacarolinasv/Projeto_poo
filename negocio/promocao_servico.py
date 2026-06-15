@@ -29,14 +29,14 @@ class PromocaoServico:
 
     def atualizar(self, id_promocao, id_categoria, percentual, data_inicio, data_fim):
         if self._dao.Listar_id(id_promocao) is None:
-            raise ValueError("Promocao nao encontrada.")
+            raise ValueError("Promoção não encontrada.")
         self._validar_categoria(id_categoria)
         inicio = self._parse_data(data_inicio)
         fim = self._parse_data(data_fim)
         self._validar_sem_sobreposicao(id_categoria, inicio, fim, id_excluir=id_promocao)
         promocao = Promocao(id_promocao, id_categoria, percentual, inicio, fim)
         if not self._dao.Atualizar(promocao):
-            raise ValueError("Promocao nao encontrada.")
+            raise ValueError("Promoção não encontrada.")
 
     def excluir(self, id_promocao):
         return self._dao.Excluir(id_promocao)
@@ -62,7 +62,7 @@ class PromocaoServico:
         if id_categoria == ID_CATEGORIA_TODAS:
             return
         if self._categoria_dao.Listar_id(id_categoria) is None:
-            raise ValueError("Categoria nao encontrada.")
+            raise ValueError("Categoria não encontrada.")
 
     def _categorias_conflitam(self, cat_a, cat_b):
         if cat_a == ID_CATEGORIA_TODAS or cat_b == ID_CATEGORIA_TODAS:
@@ -77,7 +77,7 @@ class PromocaoServico:
                 continue
             if inicio <= promocao.get_dataFim() and promocao.get_dataInicio() <= fim:
                 raise ValueError(
-                    "Ja existe promocao conflitante para o periodo informado."
+                    "Já existe promocao conflitante para o periodo informado."
                 )
 
     def _parse_data(self, valor):
@@ -87,4 +87,4 @@ class PromocaoServico:
             return valor.date()
         if isinstance(valor, str):
             return date.fromisoformat(valor)
-        raise TypeError("Data invalida.")
+        raise TypeError("Data inválida.")

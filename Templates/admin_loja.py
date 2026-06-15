@@ -656,7 +656,7 @@ class AdminLojaUI:
             st.session_state.pagina_admin = "dashboard"
 
         labels = {
-            "dashboard": "Inicio",
+            "dashboard": "Início",
             "clientes": "Clientes",
             "categorias": "Categorias",
             "produtos": "Produtos",
