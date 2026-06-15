@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "idVenda": 1,
+    "idEntregador": 1,
+    "status": "ENTREGUE"
+  },
+  {
+    "id": 2,
+    "idVenda": 2,
+    "idEntregador": 0,
+    "status": "PENDENTE"
+  },
+  {
+    "id": 3,
+    "idVenda": 3,
+    "idEntregador": 0,
+    "status": "PENDENTE"
+  },
+  {
+    "id": 4,
+    "idVenda": 4,
+    "idEntregador": 0,
+    "status": "PENDENTE"
+  },
+  {
+    "id": 5,
+    "idVenda": 5,
+    "idEntregador": 0,
+    "status": "PENDENTE"
+  },
+  {
+    "id": 6,
+    "idVenda": 6,
+    "idEntregador": 0,
+    "status": "PENDENTE"
+  }
+]

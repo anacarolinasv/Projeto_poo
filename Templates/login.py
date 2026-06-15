@@ -166,16 +166,6 @@ class LoginUI:
                     st.session_state.mostrar_boas_vindas_loja = True
                 st.rerun()
 
-        st.markdown(
-            """
-            <div class="login-extra">
-                <p style="text-align:right;margin:0.15rem 0 0;font-size:0.82rem;color:#f07043;">
-                    Esqueceu a senha?
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
     @staticmethod
     def _form_cadastro():
@@ -183,24 +173,56 @@ class LoginUI:
             nome = st.text_input("Nome completo", placeholder="Seu nome")
             email = st.text_input("E-mail", placeholder="seu@email.com")
             fone = st.text_input("Telefone", placeholder="(00) 00000-0000")
-            senha = st.text_input("Senha", type="password", placeholder="Minimo 4 caracteres")
+            senha = st.text_input("Senha", type="password", placeholder="Mínimo 4 caracteres")
             senha2 = st.text_input("Confirmar senha", type="password", placeholder="Repita a senha")
             criar = st.form_submit_button("CRIAR CONTA", type="primary", use_container_width=True)
 
         if criar:
             try:
                 cliente = View.abrir_conta(nome, email, fone, senha, senha2)
-                st.success(f"Conta criada! Seu ID de cliente e {cliente.get_id()}.")
+                st.success(f"Conta criada! Seu ID de cliente é {cliente.get_id()}.")
                 st.session_state.modo_tela = "login"
                 st.rerun()
             except ValueError as e:
                 st.error(str(e))
 
     @staticmethod
+    def _form_cadastro_entregador():
+        with st.form("cadastro_entregador_form", clear_on_submit=False):
+            nome = st.text_input("Nome completo", placeholder="Seu nome")
+            fone = st.text_input("Telefone", placeholder="(00) 00000-0000")
+            login = st.text_input("Login", placeholder="Crie um login de acesso")
+            senha = st.text_input("Senha", type="password", placeholder="Mínimo 4 caracteres")
+            senha2 = st.text_input("Confirmar senha", type="password", placeholder="Repita a senha")
+            criar = st.form_submit_button("CADASTRAR", type="primary", use_container_width=True)
+
+        if criar:
+            try:
+                entregador = View.entregador_cadastrar(nome, fone, login, senha, senha2)
+                st.success(
+                    f"Cadastro feito! Entre com o login '{entregador.get_login()}'."
+                )
+                st.session_state.modo_tela = "login"
+                st.rerun()
+            except ValueError as e:
+                st.error(str(e))
+
+    @staticmethod
+    def _rodape_entregador():
+        st.markdown('<div class="login-divider"></div>', unsafe_allow_html=True)
+        st.markdown(
+            '<p class="login-rodape">Já tem cadastro de entregador?</p>',
+            unsafe_allow_html=True,
+        )
+        if st.button("Entrar", key="ent_voltar_login", use_container_width=True):
+            st.session_state.modo_tela = "login"
+            st.rerun()
+
+    @staticmethod
     def _rodape_cadastro():
         st.markdown('<div class="login-divider"></div>', unsafe_allow_html=True)
         st.markdown(
-            '<p class="login-rodape">Ja possui uma conta?</p>',
+            '<p class="login-rodape">Já possui uma conta?</p>',
             unsafe_allow_html=True,
         )
         if st.button("Entrar", use_container_width=True):
@@ -211,11 +233,14 @@ class LoginUI:
     def _rodape_login():
         st.markdown('<div class="login-divider"></div>', unsafe_allow_html=True)
         st.markdown(
-            '<p class="login-rodape">Nao tem conta?</p>',
+            '<p class="login-rodape">Não tem conta?</p>',
             unsafe_allow_html=True,
         )
         if st.button("Abrir conta", use_container_width=True):
             st.session_state.modo_tela = "cadastro"
+            st.rerun()
+        if st.button("Sou entregador", key="ir_entregador", use_container_width=True):
+            st.session_state.modo_tela = "entregador"
             st.rerun()
 
     @staticmethod
@@ -229,6 +254,12 @@ class LoginUI:
             LoginUI._banner("CRIAR CONTA", "Cadastre-se no Pet Shop IF")
             LoginUI._form_cadastro()
             LoginUI._rodape_cadastro()
+            return
+
+        if st.session_state.modo_tela == "entregador":
+            LoginUI._banner("SOU ENTREGADOR", "Cadastre-se para realizar entregas")
+            LoginUI._form_cadastro_entregador()
+            LoginUI._rodape_entregador()
             return
 
         LoginUI._banner("BEM-VINDO(A)", "Entre na sua conta Pet Shop IF")

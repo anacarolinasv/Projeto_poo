@@ -136,21 +136,44 @@ class ComprasClienteUI:
         return str(data)
 
     @staticmethod
+    def _badge_entrega(info):
+        """Monta o selo de status de entrega para um pedido."""
+        if not info:
+            return ""
+        entrega = info["entrega"]
+        entregador = info["entregador"]
+        cores = {
+            "PENDENTE": ("#fff3ec", "#e85d30", "#fde0cc"),
+            "ALOCADA": ("#eef3ff", "#2f6fe8", "#cfe0ff"),
+            "EM_TRANSPORTE": ("#fff7e6", "#d98a00", "#ffe2a8"),
+            "ENTREGUE": ("#eafaef", "#1f9d54", "#bff0d0"),
+        }
+        fundo, cor, borda = cores.get(entrega.get_status(), ("#f2f2f2", "#666", "#ddd"))
+        nome = f" · {entregador.get_nome()}" if entregador else ""
+        return (
+            f'<span style="display:inline-block;background:{fundo};color:{cor};'
+            f"border:1px solid {borda};border-radius:999px;padding:0.2rem 0.7rem;"
+            f'font-size:0.75rem;font-weight:700;white-space:nowrap;">'
+            f"🚚 {entrega.rotulo_status()}{nome}</span>"
+        )
+
+    @staticmethod
     def main(id_cliente):
         ComprasClienteUI._css()
         st.markdown('<div id="compras-pagina">', unsafe_allow_html=True)
         st.markdown('<p class="compras-titulo">Minhas compras</p>', unsafe_allow_html=True)
 
         registros = View.listar_por_cliente(id_cliente)
+        acompanhamento = View.entrega_acompanhar_cliente(id_cliente)
 
         if not registros:
             st.markdown(
                 """
                 <div class="compras-vazio">
                     <div class="compras-vazio-icon">📦</div>
-                    <p>Voce ainda nao realizou nenhuma compra.</p>
+                    <p>Você ainda não realizou nenhuma compra.</p>
                     <p style="font-size:0.9rem;margin-top:0.3rem;">
-                        Explore os produtos e faca seu primeiro pedido!
+                        Explore os produtos e faça seu primeiro pedido!
                     </p>
                 </div>
                 """,
@@ -186,6 +209,7 @@ class ComprasClienteUI:
             itens = bloco["itens"]
             total_pedido = sum(i["total_item"] for i in itens)
             data_fmt = ComprasClienteUI._formatar_data(venda.get_data())
+            badge_html = ComprasClienteUI._badge_entrega(acompanhamento.get(venda.get_id()))
 
             itens_html = ""
             for item in itens:
@@ -208,6 +232,7 @@ class ComprasClienteUI:
                         <div>
                             <h3>Pedido #{venda.get_id()}</h3>
                             <p class="compras-pedido-data">{data_fmt}</p>
+                            <p style="margin:0.5rem 0 0 0;">{badge_html}</p>
                         </div>
                         <p class="compras-pedido-total">R$ {total_pedido:.2f}</p>
                     </div>

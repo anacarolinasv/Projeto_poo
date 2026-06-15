@@ -6,11 +6,20 @@ from Templates.admin_categorias import AdminCategoriasUI
 from Templates.admin_produtos import AdminProdutosUI
 from Templates.admin_promocoes import AdminPromocoesUI
 from Templates.admin_vendas import AdminVendasUI
+from Templates.admin_entregas import AdminEntregasUI
 from Templates.toast_utils import ToastUtils
 
 
 class AdminLojaUI:
-    PAGINAS = ("dashboard", "clientes", "categorias", "produtos", "promocoes", "vendas")
+    PAGINAS = (
+        "dashboard",
+        "clientes",
+        "categorias",
+        "produtos",
+        "promocoes",
+        "vendas",
+        "entregas",
+    )
 
     @staticmethod
     def _css():
@@ -651,8 +660,9 @@ class AdminLojaUI:
             "clientes": "Clientes",
             "categorias": "Categorias",
             "produtos": "Produtos",
-            "promocoes": "Promocoes",
+            "promocoes": "Promoções",
             "vendas": "Vendas",
+            "entregas": "Entregas",
         }
 
         if st.session_state.pagina_admin not in AdminLojaUI.PAGINAS:
@@ -680,7 +690,7 @@ class AdminLojaUI:
             )
 
         with col_menu:
-            nav_pesos = [0.85, 1.0, 1.2, 1.0, 1.15, 0.9]
+            nav_pesos = [0.85, 1.0, 1.2, 1.0, 1.15, 0.9, 1.0]
             nav_cols = st.columns(nav_pesos, gap="small")
             for col, pagina in zip(nav_cols, AdminLojaUI.PAGINAS):
                 with col:
@@ -729,3 +739,5 @@ class AdminLojaUI:
             AdminPromocoesUI.main()
         elif pagina == "vendas":
             AdminVendasUI.main()
+        elif pagina == "entregas":
+            AdminEntregasUI.main()
