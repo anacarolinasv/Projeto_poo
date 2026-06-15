@@ -1,5 +1,6 @@
 from datetime import datetime
 from negocio.carrinho_servico import CarrinhoServico
+from negocio.entrega_servico import EntregaServico
 from produtos.produto import Produto, ProdutoDAO
 from vendas.venda import Venda, VendaDAO
 from vendas.vendaItem import VendaItem, VendaItemDAO
@@ -36,6 +37,9 @@ class CheckoutServico: # caso de uso: finalizar uma compra
 
         v = Venda(id_venda, datetime.now(), False, total, id_cliente) # criar uma nova venda
         vdao.Inserir(v) # inserir a venda na lista de vendas
+
+        # Abre o controle de entrega do pedido (status inicial: aguardando entregador).
+        EntregaServico().registrar_para_venda(id_venda)
 
         idao = VendaItemDAO() # DAO encapsula leitura/gravacao em vendaItem.json (lista de itens de venda)
         for L in lista: # para cada linha na lista, gerar um novo id de item de venda

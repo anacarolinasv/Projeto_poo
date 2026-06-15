@@ -1,11 +1,13 @@
 from administradores.administrador import AdministradorDAO
 from clientes.cliente import ClienteDAO
+from negocio.entregador_servico import EntregadorServico
 
-class AutenticacaoServico: # caso de uso: autenticar um administrador ou cliente
+class AutenticacaoServico: # caso de uso: autenticar um administrador, cliente ou entregador
     #--------- Constructor ---------#
     def __init__(self):
         self._dao_admin = AdministradorDAO() # DAO encapsula leitura/gravacao em administradores.json (lista de administradores)
         self._dao_cliente = ClienteDAO() # DAO encapsula leitura/gravacao em clientes.json (lista de clientes)
+        self._entregador_servico = EntregadorServico() # autentica entregadores cadastrados
 
     def login_admin(self, login, senha): # autenticar um administrador
         # Nao aceita login ou senha em branco, levanta um erro.
@@ -40,15 +42,26 @@ class AutenticacaoServico: # caso de uso: autenticar um administrador ou cliente
             return None
         try:
             self.login_admin(login_normalizado, senha_normalizada)
-            return {"id": 1, "nome": "admin", "admin": True}
+            return {"id": 1, "nome": "admin", "admin": True, "tipo": "admin"}
         except ValueError:
             pass
+        entregador = self._entregador_servico.autenticar(
+            login_normalizado, senha_normalizada
+        )
+        if entregador is not None:
+            return {
+                "id": entregador.get_id(),
+                "nome": entregador.get_nome(),
+                "admin": False,
+                "tipo": "entregador",
+            }
         try:
             cliente = self.login_cliente(login_normalizado, senha_normalizada)
             return {
                 "id": cliente.get_id(),
                 "nome": cliente.get_nome(),
                 "admin": False,
+                "tipo": "cliente",
             }
         except ValueError:
             return None
