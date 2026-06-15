@@ -185,7 +185,7 @@ class UICliente: # classe estatica para o menu do perfil cliente
         if not lista:
             print(
                 info(
-                    "ℹ  Voce ainda nao favoritou nenhum produto "
+                    "ℹ  Você ainda não favoritou nenhum produto "
                     "(ou os itens foram removidos do catalogo)."
                 )
             )

@@ -27,7 +27,7 @@ class AdminProdutosUI:
             )
         with col_busca:
             busca = st.text_input(
-                "Buscar por descricao",
+                "Buscar por descrição",
                 placeholder="Digite parte do nome...",
                 key="admin_prod_list_busca",
             ).strip().lower()
@@ -65,7 +65,7 @@ class AdminProdutosUI:
             ))
         AdminUtils.render_tabela(
             "Listar produtos",
-            ["ID", "Descricao", "Categoria", "Preco", "Estoque"],
+            ["ID", "Descrição", "Categoria", "Preco", "Estoque"],
             linhas,
             permitir_html=True,
         )
@@ -155,7 +155,7 @@ class AdminProdutosUI:
         with st.form("admin_prod_inserir", clear_on_submit=True):
             col1, col2 = st.columns(2)
             with col1:
-                descricao = st.text_input("Descricao", placeholder="Ex.: Racao premium")
+                descricao = st.text_input("Descrição", placeholder="Ex.: Ração premium")
                 cat_nome = st.selectbox("Categoria", list(opcoes_cat.keys()))
             with col2:
                 preco = st.number_input("Preco (R$)", min_value=0.01, value=10.0, step=0.5, format="%.2f")
@@ -205,7 +205,7 @@ class AdminProdutosUI:
         with st.form("admin_prod_atualizar"):
             col1, col2 = st.columns(2)
             with col1:
-                descricao = st.text_input("Descricao", value=atual.get_descricao())
+                descricao = st.text_input("Descrição", value=atual.get_descricao())
                 if opcoes_cat:
                     nomes = list(opcoes_cat.keys())
                     idx = nomes.index(cat_atual) if cat_atual in nomes else 0
@@ -293,7 +293,7 @@ class AdminProdutosUI:
                 st.session_state.pop("admin_prod_confirm_del", None)
                 st.rerun()
             else:
-                st.error("Produto nao encontrado.")
+                st.error("Produto não encontrado.")
 
     @staticmethod
     def main():

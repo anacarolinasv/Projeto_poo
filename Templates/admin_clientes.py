@@ -52,7 +52,7 @@ class AdminClientesUI:
                 email = st.text_input("E-mail", placeholder="Ex.: maria@email.com")
             with col2:
                 fone = st.text_input("Telefone", placeholder="Ex.: (84) 99999-9999")
-                senha = st.text_input("Senha de acesso", type="password", placeholder="Minimo 4 caracteres")
+                senha = st.text_input("Senha de acesso", type="password", placeholder="Mínimo 4 caracteres")
             salvar = st.form_submit_button("Cadastrar cliente", type="primary", use_container_width=True)
 
         if salvar:
@@ -147,7 +147,7 @@ class AdminClientesUI:
                 st.session_state.pop("admin_cli_confirm_del", None)
                 st.rerun()
             else:
-                st.error("Cliente nao encontrado.")
+                st.error("Cliente não encontrado.")
 
     @staticmethod
     def main():

@@ -43,7 +43,7 @@ class AdminPromocoesUI:
     def _render_lista(promocoes, mapa_categorias):
         if not promocoes:
             st.markdown(
-                '<div class="admin-empty">Nenhuma promocao cadastrada.</div>',
+                '<div class="admin-empty">Nenhuma promoção cadastrada.</div>',
                 unsafe_allow_html=True,
             )
             return
@@ -64,8 +64,8 @@ class AdminPromocoesUI:
             )
 
         AdminUtils.render_tabela(
-            "Promocoes por categoria",
-            ["ID", "Categoria", "Desconto", "Inicio", "Fim", "Status"],
+            "Promoções por categoria",
+            ["ID", "Categoria", "Desconto", "Início", "Fim", "Status"],
             linhas,
             permitir_html=True,
         )
@@ -79,8 +79,8 @@ class AdminPromocoesUI:
             <div class="admin-cliente-preview">
                 <p class="nome">#{promocao.get_id()} — {cat}</p>
                 <p class="info">Desconto: {promocao.get_percentual():.0f}%</p>
-                <p class="info">Periodo: {AdminPromocoesUI._formatar_data(promocao.get_dataInicio())}
-                ate {AdminPromocoesUI._formatar_data(promocao.get_dataFim())}</p>
+                <p class="info">Período: {AdminPromocoesUI._formatar_data(promocao.get_dataInicio())}
+                até {AdminPromocoesUI._formatar_data(promocao.get_dataFim())}</p>
                 <p class="info">Status: {status}</p>
             </div>
             """,
@@ -90,7 +90,7 @@ class AdminPromocoesUI:
     @staticmethod
     def _form_inserir(categorias):
         if not categorias:
-            st.info("Cadastre ao menos uma categoria antes de criar promocoes.")
+            st.info("Cadastre ao menos uma categoria antes de criar promoções.")
             return
 
         opcoes = AdminPromocoesUI._opcoes_categoria(categorias)
@@ -105,14 +105,14 @@ class AdminPromocoesUI:
             )
             col_ini, col_fim = st.columns(2)
             with col_ini:
-                data_inicio = st.date_input("Data de inicio", value=date.today())
+                data_inicio = st.date_input("Data de início", value=date.today())
             with col_fim:
                 data_fim = st.date_input(
                     "Data de fim",
                     value=date.today() + timedelta(days=7),
                 )
             salvar = st.form_submit_button(
-                "Cadastrar promocao",
+                "Cadastrar promoção",
                 type="primary",
                 use_container_width=True,
             )
@@ -132,7 +132,7 @@ class AdminPromocoesUI:
                     else next(c.get_descricao() for c in categorias if c.get_id() == id_categoria)
                 )
                 st.session_state.admin_sucesso = (
-                    f"Promocao de {percentual:.0f}% para {destino} cadastrada!"
+                    f"Promoção de {percentual:.0f}% para {destino} cadastrada!"
                 )
                 st.rerun()
             except (ValueError, TypeError) as e:
@@ -141,7 +141,7 @@ class AdminPromocoesUI:
     @staticmethod
     def _form_atualizar(promocoes, categorias):
         if not promocoes:
-            st.info("Nenhuma promocao cadastrada para atualizar.")
+            st.info("Nenhuma promoção cadastrada para atualizar.")
             return
         if not categorias:
             st.info("Nenhuma categoria cadastrada.")
@@ -158,7 +158,7 @@ class AdminPromocoesUI:
             )
             opcoes_promo[rotulo] = p
 
-        escolha = st.selectbox("Promocao", list(opcoes_promo.keys()), key="admin_promo_edit_sel")
+        escolha = st.selectbox("Promoção", list(opcoes_promo.keys()), key="admin_promo_edit_sel")
         atual = opcoes_promo[escolha]
         AdminPromocoesUI._preview(atual, mapa_categorias)
 
@@ -189,7 +189,7 @@ class AdminPromocoesUI:
             col_ini, col_fim = st.columns(2)
             with col_ini:
                 data_inicio = st.date_input(
-                    "Data de inicio",
+                    "Data de início",
                     value=atual.get_dataInicio(),
                 )
             with col_fim:
@@ -198,7 +198,7 @@ class AdminPromocoesUI:
                     value=atual.get_dataFim(),
                 )
             salvar = st.form_submit_button(
-                "Salvar alteracoes",
+                "Salvar alterações",
                 type="primary",
                 use_container_width=True,
             )
@@ -213,7 +213,7 @@ class AdminPromocoesUI:
                     data_inicio,
                     data_fim,
                 )
-                st.session_state.admin_sucesso = f"Promocao #{atual.get_id()} atualizada!"
+                st.session_state.admin_sucesso = f"Promoção #{atual.get_id()} atualizada!"
                 st.rerun()
             except (ValueError, TypeError) as e:
                 st.error(str(e))
@@ -221,7 +221,7 @@ class AdminPromocoesUI:
     @staticmethod
     def _form_excluir(promocoes):
         if not promocoes:
-            st.info("Nenhuma promocao cadastrada para excluir.")
+            st.info("Nenhuma promoção cadastrada para excluir.")
             return
 
         mapa_categorias = AdminPromocoesUI._mapa_categorias()
@@ -230,7 +230,7 @@ class AdminPromocoesUI:
             cat = AdminPromocoesUI._rotulo_categoria(p.get_idCategoria(), mapa_categorias)
             opcoes[f"#{p.get_id()} — {cat} ({p.get_percentual():.0f}%)"] = p
 
-        escolha = st.selectbox("Promocao", list(opcoes.keys()), key="admin_promo_del_sel")
+        escolha = st.selectbox("Promoção", list(opcoes.keys()), key="admin_promo_del_sel")
         atual = opcoes[escolha]
         AdminPromocoesUI._preview(atual, mapa_categorias)
 
@@ -245,7 +245,7 @@ class AdminPromocoesUI:
         )
 
         if st.button(
-            "Excluir promocao",
+            "Excluir promoção",
             type="primary",
             use_container_width=True,
             key="admin_promo_del_btn",
@@ -253,11 +253,11 @@ class AdminPromocoesUI:
         ):
             ok = View.promocao_excluir(atual.get_id())
             if ok:
-                st.session_state.admin_sucesso = f"Promocao #{atual.get_id()} excluida!"
+                st.session_state.admin_sucesso = f"Promoção #{atual.get_id()} excluída!"
                 st.session_state.pop("admin_promo_confirm_del", None)
                 st.rerun()
             else:
-                st.error("Promocao nao encontrada.")
+                st.error("Promoção não encontrada.")
 
     @staticmethod
     def main():
@@ -268,7 +268,7 @@ class AdminPromocoesUI:
         st.markdown(
             """
             <div class="admin-hero">
-                <h2>Promocoes</h2>
+                <h2>Promoções</h2>
                 <p>Defina descontos por categoria ou para todas, com periodo de inicio e fim.</p>
             </div>
             """,

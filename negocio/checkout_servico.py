@@ -10,7 +10,7 @@ class CheckoutServico: # caso de uso: finalizar uma compra
     def finalizar_compra(self, id_cliente, carrinho): # finalizar uma compra
 
         if id_cliente <= 0: # se o id do cliente for menor ou igual a zero, levanta um erro
-            raise ValueError("Cliente invalido.")
+            raise ValueError("Cliente inválido.")
 
         if not carrinho: # se o carrinho estiver vazio, levanta um erro
             raise ValueError("Carrinho vazio.")
@@ -29,7 +29,7 @@ class CheckoutServico: # caso de uso: finalizar uma compra
 
             if p.get_estoque() < L["quantidade"]: # se o estoque do produto for menor que a quantidade, levanta um erro
                 raise ValueError(
-                    f"Estoque insuficiente para {p.get_descricao()} (disponivel: {p.get_estoque()})."
+                    f"Estoque insuficiente para {p.get_descricao()} (disponível: {p.get_estoque()})."
                 )
 
         vdao = VendaDAO() # DAO encapsula leitura/gravacao em vendas.json (lista de vendas)

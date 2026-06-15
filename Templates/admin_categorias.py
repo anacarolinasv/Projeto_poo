@@ -19,7 +19,7 @@ class AdminCategoriasUI:
         ]
         AdminUtils.render_tabela(
             "Listar categorias",
-            ["ID", "Descricao"],
+            ["ID", "Descrição"],
             linhas,
             permitir_html=True,
         )
@@ -43,7 +43,7 @@ class AdminCategoriasUI:
             unsafe_allow_html=True,
         )
         with st.form("admin_cat_inserir", clear_on_submit=True):
-            descricao = st.text_input("Descricao", placeholder="Ex.: Roupas")
+            descricao = st.text_input("Descrição", placeholder="Ex.: Roupas")
             salvar = st.form_submit_button("Cadastrar categoria", type="primary", use_container_width=True)
         if salvar:
             try:
@@ -66,7 +66,7 @@ class AdminCategoriasUI:
         AdminCategoriasUI._preview(atual)
 
         with st.form("admin_cat_atualizar"):
-            descricao = st.text_input("Descricao", value=atual.get_descricao())
+            descricao = st.text_input("Descrição", value=atual.get_descricao())
             salvar = st.form_submit_button("Salvar alteracoes", type="primary", use_container_width=True)
         if salvar:
             try:
@@ -112,7 +112,7 @@ class AdminCategoriasUI:
                 st.session_state.pop("admin_cat_confirm_del", None)
                 st.rerun()
             else:
-                st.error("Categoria nao encontrada.")
+                st.error("Categoria não encontrada.")
 
     @staticmethod
     def main():

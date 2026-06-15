@@ -7,7 +7,7 @@ class CarrinhoServico: # caso de uso: adicionar, remover, esvaziar e montar resu
     def adicionar(self, carrinho, id_produto, quantidade): # adicionar um item ao carrinho
 
         if not isinstance(carrinho, dict): # se o carrinho não for um dicionário, levanta um erro
-            raise TypeError("Carrinho invalido.")
+            raise TypeError("Carrinho inválido.")
         if quantidade <= 0: # se a quantidade for menor ou igual a zero, levanta um erro
             raise ValueError("Quantidade deve ser maior que zero.")
 
@@ -15,19 +15,19 @@ class CarrinhoServico: # caso de uso: adicionar, remover, esvaziar e montar resu
         produto = dao.Listar_id(id_produto) # buscar um produto pelo id
 
         if produto is None: # se o produto não for encontrado, levanta um erro
-            raise ValueError("Produto nao encontrado.")
+            raise ValueError("Produto não encontrado.")
         if produto.get_estoque() <= 0: # se o estoque do produto for menor ou igual a zero, levanta um erro
-            raise ValueError("Produto indisponivel para venda.")
+            raise ValueError("Produto indisponível para venda.")
 
         quantidade_no_carrinho = int(carrinho.get(id_produto, 0)) # quantidade ja pedida deste mesmo produto no carrinho (0 se primeira vez)
         if quantidade_no_carrinho + quantidade > produto.get_estoque(): # se a quantidade ja pedida mais a quantidade passada for maior que o estoque, levanta um erro
-            raise ValueError(f"Quantidade indisponivel. No carrinho: {quantidade_no_carrinho}, estoque: {produto.get_estoque()}.")
+            raise ValueError(f"Quantidade indisponível. No carrinho: {quantidade_no_carrinho}, estoque: {produto.get_estoque()}.")
 
         carrinho[id_produto] = quantidade_no_carrinho + quantidade # atualiza ou cria a entrada: mesmo id_produto agrega quantidade
 
     def remover_item(self, carrinho, id_produto): # remover um item do carrinho
         if not isinstance(carrinho, dict): # se o carrinho não for um dicionário, levanta um erro
-            raise TypeError("Carrinho invalido.")
+            raise TypeError("Carrinho inválido.")
 
         if id_produto not in carrinho: # se o id do produto não estiver no carrinho, levanta um erro
             raise ValueError("Este produto nao esta no carrinho.")
@@ -35,7 +35,7 @@ class CarrinhoServico: # caso de uso: adicionar, remover, esvaziar e montar resu
 
     def esvaziar(self, carrinho): # esvaziar o carrinho
         if not isinstance(carrinho, dict): # se o carrinho não for um dicionário, levanta um erro
-            raise TypeError("Carrinho invalido.")
+            raise TypeError("Carrinho inválido.")
         carrinho.clear() # remove todos os itens do carrinho
 
     def montar_resumo(self, carrinho): # montar o resumo do carrinho
@@ -72,12 +72,12 @@ class CarrinhoServico: # caso de uso: adicionar, remover, esvaziar e montar resu
 
     def sincronizar(self, id_cliente, carrinho):
         if not isinstance(carrinho, dict):
-            raise TypeError("Carrinho invalido.")
+            raise TypeError("Carrinho inválido.")
         CarrinhoDAO().Salvar_por_cliente(id_cliente, carrinho)
 
     def carregar(self, id_cliente, carrinho):
         if not isinstance(carrinho, dict):
-            raise TypeError("Carrinho invalido.")
+            raise TypeError("Carrinho inválido.")
         salvos = CarrinhoDAO().Carregar_por_cliente(id_cliente)
         carrinho.clear()
         for id_produto, quantidade in salvos.items():
