@@ -8,8 +8,8 @@
   {
     "id": 2,
     "idVenda": 2,
-    "idEntregador": 0,
-    "status": "PENDENTE"
+    "idEntregador": 1,
+    "status": "ENTREGUE"
   },
   {
     "id": 3,
