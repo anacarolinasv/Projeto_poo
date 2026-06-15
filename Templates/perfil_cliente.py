@@ -210,7 +210,7 @@ class PerfilClienteUI:
     def _salvar_foto(id_cliente, arquivo):
         ext = (arquivo.name or "").rsplit(".", 1)[-1].lower()
         if ext not in ("jpg", "jpeg", "png", "webp"):
-            raise ValueError("Formato invalido. Use JPG, PNG ou WEBP.")
+            raise ValueError("Formato inválido. Use JPG, PNG ou WEBP.")
         PerfilClienteUI.FOTOS_DIR.mkdir(parents=True, exist_ok=True)
         for antiga in PerfilClienteUI.FOTOS_DIR.glob(f"{id_cliente}.*"):
             antiga.unlink()

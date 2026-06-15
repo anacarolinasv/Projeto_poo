@@ -22,13 +22,13 @@ class AbrirContaServico: # caso de uso: visitante abre conta para passar a ser c
             raise ValueError("Senha e obrigatoria.")
         # Garante que o usuario digitou a mesma senha nos dois campos da UI.
         if senha != senha_confirmacao:
-            raise ValueError("As senhas nao conferem.")
+            raise ValueError("As senhas não conferem.")
         # Politica minima de seguranca (evita senhas triviais de 1-3 caracteres).
         if len(senha) < 4:
             raise ValueError("Senha deve ter pelo menos 4 caracteres.")
         # Email e chave logica: nao pode haver duas contas com o mesmo email.
         if self._dao.Listar_por_email(email) is not None:
-            raise ValueError("Ja existe conta com este email.")
+            raise ValueError("Já existe conta com este email.")
         # Proximo id numerico livre na sequencia armazenada (ex.: max(id)+1 ou 1 se vazio).
         novo_id = self._dao.Proximo_id()
         # Instancia o dominio com os dados validados.

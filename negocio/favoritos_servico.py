@@ -8,17 +8,17 @@ class FavoritosServico:  # caso de uso: favoritar, desfavoritar e listar favorit
     def favoritar(self, id_cliente, id_produto):  # favoritar um produto
 
         if id_cliente <= 0: # se o id do cliente for menor ou igual a zero, levanta um erro
-            raise ValueError("Cliente invalido.")
+            raise ValueError("Cliente inválido.")
         if id_produto <= 0: # se o id do produto for menor ou igual a zero, levanta um erro
-            raise ValueError("Produto invalido.")
+            raise ValueError("Produto inválido.")
 
         cliente_dao = ClienteDAO() # DAO encapsula leitura/gravacao em clientes.json (lista de clientes)
         if cliente_dao.Listar_id(id_cliente) is None: # se o cliente não for encontrado, levanta um erro
-            raise ValueError("Cliente nao encontrado.")
+            raise ValueError("Cliente não encontrado.")
 
         produto_dao = ProdutoDAO() # DAO encapsula leitura/gravacao em produtos.json (lista de produtos)
         if produto_dao.Listar_id(id_produto) is None: # se o produto não for encontrado, levanta um erro
-            raise ValueError("Produto nao encontrado.")
+            raise ValueError("Produto não encontrado.")
 
         favorito_dao = FavoritoDAO() # DAO encapsula leitura/gravacao em favoritos.json (lista de favoritos)
         if favorito_dao.Buscar_por_cliente_produto(id_cliente, id_produto) is not None: # se o produto já estiver nos favoritos do cliente, levanta um erro
@@ -30,9 +30,9 @@ class FavoritosServico:  # caso de uso: favoritar, desfavoritar e listar favorit
     def desfavoritar(self, id_cliente, id_produto):  # desfavoritar um produto
 
         if id_cliente <= 0: # se o id do cliente for menor ou igual a zero, levanta um erro
-            raise ValueError("Cliente invalido.")
+            raise ValueError("Cliente inválido.")
         if id_produto <= 0: # se o id do produto for menor ou igual a zero, levanta um erro
-            raise ValueError("Produto invalido.")
+            raise ValueError("Produto inválido.")
 
         favorito_dao = FavoritoDAO() # DAO encapsula leitura/gravacao em favoritos.json (lista de favoritos)
         if not favorito_dao.Excluir_por_cliente_produto(id_cliente, id_produto): # se o favorito não for encontrado, levanta um erro
@@ -41,7 +41,7 @@ class FavoritosServico:  # caso de uso: favoritar, desfavoritar e listar favorit
     def listar_produtos_favoritos(self, id_cliente):  # listar produtos favoritos do cliente
 
         if id_cliente <= 0: # se o id do cliente for menor ou igual a zero, levanta um erro
-            raise ValueError("Cliente invalido.")
+            raise ValueError("Cliente inválido.")
 
         favorito_dao = FavoritoDAO() # DAO encapsula leitura/gravacao em favoritos.json (lista de favoritos)
         produto_dao = ProdutoDAO() # DAO encapsula leitura/gravacao em produtos.json (lista de produtos)

@@ -116,7 +116,7 @@ class UIAdmin: # classe estatica para o menu do perfil administrador
                 atual = c # atribui o objeto a variavel atual
                 break # sai do loop
         if atual is None: # se a variavel atual for None, imprime uma mensagem de aviso
-            print(aviso("!  Cliente nao encontrado.")) # imprime uma mensagem de aviso se o cliente nao for encontrado
+            print(aviso("!  Cliente não encontrado.")) # imprime uma mensagem de aviso se o cliente nao for encontrado
             return # retorna None se o cliente nao for encontrado
         # Enter em branco mantem o valor entre colchetes (padrao "editar in-place").
         nome = input(f"  Nome   [{atual.get_nome()}]: ").strip() or atual.get_nome() # le o nome do cliente a ser atualizado
@@ -136,7 +136,7 @@ class UIAdmin: # classe estatica para o menu do perfil administrador
         if ok: # se o cliente foi excluido, imprime uma mensagem de sucesso
             print(msg_ok("✔  Cliente excluido.")) # imprime uma mensagem de sucesso se o cliente foi excluido
         else: # se o cliente nao foi excluido, imprime uma mensagem de aviso
-            print(aviso("!  Cliente nao encontrado.")) # imprime uma mensagem de aviso se o cliente nao foi encontrado
+            print(aviso("!  Cliente não encontrado.")) # imprime uma mensagem de aviso se o cliente nao foi encontrado
 
     @staticmethod
     def categoria_inserir(): # metodo estatico para inserir uma categoria
@@ -174,7 +174,7 @@ class UIAdmin: # classe estatica para o menu do perfil administrador
         if ok: # se a categoria foi excluida, imprime uma mensagem de sucesso
             print(msg_ok("✔  Categoria excluida.")) # imprime uma mensagem de sucesso se a categoria foi excluida
         else: # se a categoria nao foi excluida, imprime uma mensagem de aviso
-            print(aviso("!  Categoria nao encontrada.")) # imprime uma mensagem de aviso se a categoria nao foi encontrada
+            print(aviso("!  Categoria não encontrada.")) # imprime uma mensagem de aviso se a categoria nao foi encontrada
 
     @staticmethod
     def produto_inserir(): # metodo estatico para inserir um produto    
@@ -208,7 +208,7 @@ class UIAdmin: # classe estatica para o menu do perfil administrador
                 atual = p # atribui o objeto a variavel atual
                 break # sai do loop
         if atual is None: # se a variavel atual for None, imprime uma mensagem de aviso
-            print(aviso("!  Produto nao encontrado.")) # imprime uma mensagem de aviso se o produto nao for encontrado
+            print(aviso("!  Produto não encontrado.")) # imprime uma mensagem de aviso se o produto nao for encontrado
             return # retorna None se o produto nao for encontrado
         descricao = input(f"  Descricao    [{atual.get_descricao()}]: ").strip() or atual.get_descricao()
         preco_txt = input(f"  Preco        [{atual.get_preco()}]: ").strip()
@@ -230,7 +230,7 @@ class UIAdmin: # classe estatica para o menu do perfil administrador
         if ok: # se o produto foi excluido, imprime uma mensagem de sucesso
             print(msg_ok("✔  Produto excluido.")) # imprime uma mensagem de sucesso se o produto foi excluido
         else: # se o produto nao foi excluido, imprime uma mensagem de aviso
-            print(aviso("!  Produto nao encontrado.")) # imprime uma mensagem de aviso se o produto nao for encontrado
+            print(aviso("!  Produto não encontrado.")) # imprime uma mensagem de aviso se o produto nao for encontrado
 
     @staticmethod
     def produto_reajustar(): # metodo estatico para reajustar os precos dos produtos

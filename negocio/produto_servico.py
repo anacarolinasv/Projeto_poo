@@ -27,7 +27,7 @@ class ProdutoServico:  # caso de uso: manter cadastro de produtos e reajustar pr
     def atualizar(self, id_produto, descricao, preco, estoque, id_categoria):
         produto = Produto(id_produto, descricao, preco, estoque, id_categoria)
         if not self._dao.Atualizar(produto):
-            raise ValueError("Produto nao encontrado.")
+            raise ValueError("Produto não encontrado.")
 
     def excluir(self, id_produto):
         ok = self._dao.Excluir(id_produto)

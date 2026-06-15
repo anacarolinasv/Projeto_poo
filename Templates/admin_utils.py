@@ -120,10 +120,10 @@ class AdminUtils:
                 "email": "E-mail",
                 "fone": "Telefone",
                 "senha": "Senha",
-                "descricao": "Descricao",
+                "descricao": "Descrição",
             }
             faltando = ", ".join(labels.get(c, c) for c in vazios)
-            raise ValueError(f"Preencha os campos obrigatorios: {faltando}.")
+            raise ValueError(f"Preencha os campos obrigatórios: {faltando}.")
 
     @staticmethod
     def _esc(texto):

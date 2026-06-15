@@ -3,6 +3,7 @@ from views import View
 from Templates.login import LoginUI
 from Templates.loja_cliente import LojaClienteUI
 from Templates.admin_loja import AdminLojaUI
+from Templates.painel_entregador import PainelEntregadorUI
 
 
 st.set_page_config(
@@ -28,6 +29,10 @@ class IndexUI:
 
         if st.session_state.usuario["admin"]:
             AdminLojaUI.main(st.session_state.usuario)
+            return
+
+        if st.session_state.usuario.get("tipo") == "entregador":
+            PainelEntregadorUI.main(st.session_state.usuario)
             return
 
         LojaClienteUI.main(st.session_state.usuario, st.session_state.carrinho)

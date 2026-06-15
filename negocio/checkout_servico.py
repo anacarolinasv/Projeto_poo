@@ -1,5 +1,6 @@
 from datetime import datetime
 from negocio.carrinho_servico import CarrinhoServico
+from negocio.entrega_servico import EntregaServico
 from produtos.produto import Produto, ProdutoDAO
 from vendas.venda import Venda, VendaDAO
 from vendas.vendaItem import VendaItem, VendaItemDAO
@@ -9,7 +10,7 @@ class CheckoutServico: # caso de uso: finalizar uma compra
     def finalizar_compra(self, id_cliente, carrinho): # finalizar uma compra
 
         if id_cliente <= 0: # se o id do cliente for menor ou igual a zero, levanta um erro
-            raise ValueError("Cliente invalido.")
+            raise ValueError("Cliente inválido.")
 
         if not carrinho: # se o carrinho estiver vazio, levanta um erro
             raise ValueError("Carrinho vazio.")
@@ -28,7 +29,7 @@ class CheckoutServico: # caso de uso: finalizar uma compra
 
             if p.get_estoque() < L["quantidade"]: # se o estoque do produto for menor que a quantidade, levanta um erro
                 raise ValueError(
-                    f"Estoque insuficiente para {p.get_descricao()} (disponivel: {p.get_estoque()})."
+                    f"Estoque insuficiente para {p.get_descricao()} (disponível: {p.get_estoque()})."
                 )
 
         vdao = VendaDAO() # DAO encapsula leitura/gravacao em vendas.json (lista de vendas)
@@ -36,6 +37,9 @@ class CheckoutServico: # caso de uso: finalizar uma compra
 
         v = Venda(id_venda, datetime.now(), False, total, id_cliente) # criar uma nova venda
         vdao.Inserir(v) # inserir a venda na lista de vendas
+
+        # Abre o controle de entrega do pedido (status inicial: aguardando entregador).
+        EntregaServico().registrar_para_venda(id_venda)
 
         idao = VendaItemDAO() # DAO encapsula leitura/gravacao em vendaItem.json (lista de itens de venda)
         for L in lista: # para cada linha na lista, gerar um novo id de item de venda

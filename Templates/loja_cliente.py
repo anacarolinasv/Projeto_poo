@@ -229,13 +229,21 @@ class LojaClienteUI:
                 [data-testid="column"]:has(.loja-produto-shell) {
                     position: relative !important;
                     background: #ffffff !important;
-                    border-radius: 14px !important;
-                    border: 1px solid #ececec !important;
-                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07) !important;
+                    border-radius: 16px !important;
+                    border: 1px solid #f0e6dc !important;
+                    box-shadow: 0 6px 20px rgba(180, 90, 40, 0.08) !important;
                     overflow: hidden !important;
                     margin-bottom: 1.25rem !important;
                     display: flex !important;
                     flex-direction: column !important;
+                    transition: transform 0.16s ease, box-shadow 0.16s ease,
+                        border-color 0.16s ease !important;
+                }
+
+                [data-testid="column"]:has(.loja-produto-shell):hover {
+                    transform: translateY(-4px) !important;
+                    box-shadow: 0 16px 34px rgba(180, 90, 40, 0.18) !important;
+                    border-color: #f5c4a8 !important;
                 }
 
                 [data-testid="column"]:has(.loja-produto-shell) > div {
@@ -345,18 +353,19 @@ class LojaClienteUI:
                     min-height: 8.5rem;
                 }
 
-                .loja-produto-corpo h3 {
-                    margin: 0;
-                    color: #222;
-                    font-size: 0.9rem;
+                .loja-produto-titulo {
+                    margin: 0 !important;
+                    color: #2a2a2a;
+                    font-size: 0.92rem;
                     font-weight: 700;
-                    line-height: 1.35;
-                    min-height: 2.7em;
-                    max-height: 2.7em;
-                    overflow: hidden;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
+                    line-height: 1.3 !important;
+                    min-height: 2.6em;
+                    overflow: hidden !important;
+                    display: -webkit-box !important;
+                    -webkit-line-clamp: 2 !important;
+                    -webkit-box-orient: vertical !important;
+                    white-space: normal !important;
+                    word-break: break-word;
                 }
 
                 .loja-cat-wrap {
@@ -367,13 +376,15 @@ class LojaClienteUI:
                     display: inline-block;
                     width: auto;
                     max-width: max-content;
-                    border: 1px solid #444;
-                    border-radius: 5px;
-                    padding: 0.15rem 0.45rem;
-                    font-size: 0.65rem;
+                    background: #fff3ec;
+                    border: 1px solid #fde0cc;
+                    border-radius: 999px;
+                    padding: 0.18rem 0.6rem;
+                    font-size: 0.66rem;
                     font-weight: 700;
-                    color: #333;
-                    letter-spacing: 0.02em;
+                    color: #e85d30;
+                    letter-spacing: 0.03em;
+                    text-transform: uppercase;
                 }
 
                 .loja-preco-ref {
@@ -754,15 +765,14 @@ class LojaClienteUI:
     def _html_preco(produto):
         detalhes = View.produto_preco_detalhes(produto)
         if detalhes["em_promocao"]:
-            return f"""
-                <div class="loja-preco-ref">
-                    <p class="preco-cheio riscado">R$ {detalhes["preco_base"]:.2f}</p>
-                    <div class="loja-preco-promo-linha">
-                        <span class="preco-oferta">R$ {detalhes["preco_efetivo"]:.2f}</span>
-                        <span class="loja-badge-off">-{detalhes["percentual"]:.0f}%</span>
-                    </div>
-                </div>
-            """
+            return (
+                '<div class="loja-preco-ref">'
+                f'<p class="preco-cheio riscado">R$ {detalhes["preco_base"]:.2f}</p>'
+                '<div class="loja-preco-promo-linha">'
+                f'<span class="preco-oferta">R$ {detalhes["preco_efetivo"]:.2f}</span>'
+                f'<span class="loja-badge-off">-{detalhes["percentual"]:.0f}%</span>'
+                "</div></div>"
+            )
         return (
             f'<div class="loja-preco-ref">'
             f'<p class="preco-cheio">R$ {detalhes["preco_base"]:.2f}</p>'
@@ -807,7 +817,7 @@ class LojaClienteUI:
             f"""
             <div class="loja-produto-card">
                 <div class="loja-produto-corpo">
-                    <h3>{nome}</h3>
+                    <div class="loja-produto-titulo" title="{nome}">{nome}</div>
                     <div class="loja-cat-wrap"><span class="loja-cat-chip">{cat_html}</span></div>
                     {preco_html}
                     {estoque_html}
@@ -818,7 +828,7 @@ class LojaClienteUI:
         )
         st.markdown('<span class="loja-comprar-anchor"></span>', unsafe_allow_html=True)
         if st.button(
-            "COMPRAR",
+            "🛒 Adicionar",
             key=f"{key_prefix}_add_{produto.get_id()}",
             use_container_width=True,
             type="primary",

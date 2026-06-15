@@ -5,6 +5,8 @@ from negocio.carrinho_servico import CarrinhoServico
 from negocio.categoria_servico import CategoriaServico
 from negocio.checkout_servico import CheckoutServico
 from negocio.cliente_servico import ClienteServico
+from negocio.entrega_servico import EntregaServico
+from negocio.entregador_servico import EntregadorServico
 from negocio.favoritos_servico import FavoritosServico
 from negocio.preco_servico import PrecoServico
 from negocio.produto_servico import ProdutoServico
@@ -177,3 +179,34 @@ class View:  # classe estatica para a fachada da aplicacao.
     @staticmethod
     def listar_produtos_favoritos(id_cliente):
         return FavoritosServico().listar_produtos_favoritos(id_cliente)
+
+    # --------- Entregadores / Entregas ---------#
+    @staticmethod
+    def entregador_cadastrar(nome, fone, login, senha, senha_confirmacao):
+        return EntregadorServico().cadastrar(
+            nome, fone, login, senha, senha_confirmacao
+        )
+
+    @staticmethod
+    def entregador_listar():
+        return EntregadorServico().listar()
+
+    @staticmethod
+    def entrega_listar_pedidos():
+        return EntregaServico().listar_pedidos()
+
+    @staticmethod
+    def entrega_alocar(id_venda, id_entregador):
+        return EntregaServico().alocar_entregador(id_venda, id_entregador)
+
+    @staticmethod
+    def entrega_listar_para_entregador(id_entregador):
+        return EntregaServico().listar_para_entregador(id_entregador)
+
+    @staticmethod
+    def entrega_avancar_status(id_entrega, id_entregador):
+        return EntregaServico().avancar_status(id_entrega, id_entregador)
+
+    @staticmethod
+    def entrega_acompanhar_cliente(id_cliente):
+        return EntregaServico().listar_para_cliente(id_cliente)
