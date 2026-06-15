@@ -1,3 +1,5 @@
+from carrinhos.carrinho import CarrinhoDAO
+from negocio.preco_servico import PrecoServico
 from produtos.produto import ProdutoDAO
 
 class CarrinhoServico: # caso de uso: adicionar, remover, esvaziar e montar resumo do carrinho
@@ -38,6 +40,7 @@ class CarrinhoServico: # caso de uso: adicionar, remover, esvaziar e montar resu
 
     def montar_resumo(self, carrinho): # montar o resumo do carrinho
         dao = ProdutoDAO() # DAO encapsula leitura/gravacao em produtos.json (lista de produtos)
+        preco_servico = PrecoServico()
         lista = [] # lista de linhas do carrinho
         total = 0.0 # total do carrinho
 
@@ -47,7 +50,8 @@ class CarrinhoServico: # caso de uso: adicionar, remover, esvaziar e montar resu
                 del carrinho[id_produto] # remove o item do carrinho
                 continue
 
-            preco_unitario = float(produto.get_preco()) # preço unitário do produto
+            detalhes = preco_servico.detalhes(produto)
+            preco_unitario = float(detalhes["preco_efetivo"])
             quantidade = int(quantidade) # quantidade do produto
             total_item = round(preco_unitario * quantidade, 2) # total do item
             total += total_item # atualiza o total
@@ -56,9 +60,25 @@ class CarrinhoServico: # caso de uso: adicionar, remover, esvaziar e montar resu
                     "id": id_produto,
                     "descricao": produto.get_descricao(),
                     "preco_unitario": preco_unitario,
+                    "preco_base": float(detalhes["preco_base"]),
+                    "em_promocao": bool(detalhes["em_promocao"]),
+                    "percentual": float(detalhes["percentual"]),
                     "quantidade": quantidade,
                     "total_item": total_item,
                 }
             ) # adiciona a linha do carrinho
 
         return lista, round(total, 2) # retorna a lista de linhas e o total arredondado para 2 casas decimais
+
+    def sincronizar(self, id_cliente, carrinho):
+        if not isinstance(carrinho, dict):
+            raise TypeError("Carrinho invalido.")
+        CarrinhoDAO().Salvar_por_cliente(id_cliente, carrinho)
+
+    def carregar(self, id_cliente, carrinho):
+        if not isinstance(carrinho, dict):
+            raise TypeError("Carrinho invalido.")
+        salvos = CarrinhoDAO().Carregar_por_cliente(id_cliente)
+        carrinho.clear()
+        for id_produto, quantidade in salvos.items():
+            carrinho[int(id_produto)] = int(quantidade)

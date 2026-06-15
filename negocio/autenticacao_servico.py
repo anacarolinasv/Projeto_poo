@@ -31,4 +31,24 @@ class AutenticacaoServico: # caso de uso: autenticar um administrador ou cliente
         if c.get_senha() != senha: # se a senha do cliente for diferente da senha passada, levanta um erro
             raise ValueError("Email ou senha invalidos.")
         # Se a senha do cliente for igual à senha passada, retorna o cliente
-        return c 
+        return c
+
+    def autenticar(self, login_ou_email, senha):
+        login_normalizado = (login_ou_email or "").strip()
+        senha_normalizada = (senha or "").strip()
+        if not login_normalizado or not senha_normalizada:
+            return None
+        try:
+            self.login_admin(login_normalizado, senha_normalizada)
+            return {"id": 1, "nome": "admin", "admin": True}
+        except ValueError:
+            pass
+        try:
+            cliente = self.login_cliente(login_normalizado, senha_normalizada)
+            return {
+                "id": cliente.get_id(),
+                "nome": cliente.get_nome(),
+                "admin": False,
+            }
+        except ValueError:
+            return None

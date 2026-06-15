@@ -243,5 +243,5 @@ class UIAdmin: # classe estatica para o menu do perfil administrador
     @staticmethod
     def venda_listar(): # metodo estatico para listar as vendas
         # Todas as vendas do sistema, com nome do cliente em cada bloco.
-        registros = View.admin_vendas_com_itens() # chama o metodo admin_vendas_com_itens da classe View
+        registros = View.listar_todas()
         imprimir_vendas_com_itens(registros, "Todas as vendas", mostrar_cliente=True) # imprime as vendas com os itens e o nome do cliente em cada bloco

@@ -70,13 +70,13 @@ class UI:
         linha_formulario("Entrar no sistema")
         email = input("  E-mail: ")
         senha = input("  Senha:  ")
-        cls.__usuario = View.usuario_autenticar(email, senha)
+        cls.__usuario = View.autenticar(email, senha)
         if cls.__usuario is None:
             print(erro("✖  Usuario ou senha invalidos."))
         else:
             cls.__carrinho = {}
             if not cls.__usuario["admin"]:
-                View.cliente_carrinho_carregar(cls.__usuario["id"], cls.__carrinho)
+                View.carregar(cls.__usuario["id"], cls.__carrinho)
             print(ok("✔  Login realizado com sucesso."))
 
     @staticmethod
@@ -88,7 +88,7 @@ class UI:
         senha = input("  Senha:            ")
         senha2 = input("  Confirmar senha:  ")
         try:
-            cliente = View.abrir_conta_visitante(nome, email, fone, senha, senha2)
+            cliente = View.abrir_conta(nome, email, fone, senha, senha2)
             print(ok("✔  Conta criada com sucesso. Voce ja pode entrar como cliente."))
             print(info(f"ℹ  Seu identificador de cliente: {cliente.get_id()}"))
             print(f"  {cliente}")
