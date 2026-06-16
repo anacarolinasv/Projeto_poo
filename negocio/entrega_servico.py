@@ -1,14 +1,14 @@
-from clientes.cliente import ClienteDAO
-from entregadores.entregador import EntregadorDAO
-from entregas.entrega import (
+from persistencia.cliente_dao import ClienteDAO
+from persistencia.entregador_dao import EntregadorDAO
+from entidades.entrega import (
     STATUS_ALOCADA,
     STATUS_EM_TRANSPORTE,
     STATUS_ENTREGUE,
     Entrega,
-    EntregaDAO,
 )
+from persistencia.entrega_dao import EntregaDAO
 from excecoes.excecoes import RegraNegocioError
-from vendas.venda import VendaDAO
+from persistencia.venda_dao import VendaDAO
 
 # Próximo status a partir do atual (avanço linear feito pelo entregador).
 _PROXIMO_STATUS = {

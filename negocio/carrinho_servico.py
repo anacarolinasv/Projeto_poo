@@ -1,6 +1,6 @@
-from carrinhos.carrinho import CarrinhoDAO
+from persistencia.carrinho_dao import CarrinhoDAO
 from negocio.preco_servico import PrecoServico
-from produtos.produto import ProdutoDAO
+from persistencia.produto_dao import ProdutoDAO
 
 class CarrinhoServico: # caso de uso: adicionar, remover, esvaziar e montar resumo do carrinho
 

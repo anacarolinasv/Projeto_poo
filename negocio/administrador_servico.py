@@ -1,4 +1,4 @@
-from administradores.administrador import AdministradorDAO
+from persistencia.administrador_dao import AdministradorDAO
 
 
 class AdministradorServico:  # caso de uso: inicializacao do sistema

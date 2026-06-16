@@ -1,6 +1,7 @@
-from clientes.cliente import ClienteDAO
-from favoritos.favorito import Favorito, FavoritoDAO
-from produtos.produto import ProdutoDAO
+from persistencia.cliente_dao import ClienteDAO
+from entidades.favorito import Favorito
+from persistencia.favorito_dao import FavoritoDAO
+from persistencia.produto_dao import ProdutoDAO
 
 
 class FavoritosServico:  # caso de uso: favoritar, desfavoritar e listar favoritos

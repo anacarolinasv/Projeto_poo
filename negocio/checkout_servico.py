@@ -1,9 +1,12 @@
 from datetime import datetime
 from negocio.carrinho_servico import CarrinhoServico
 from negocio.entrega_servico import EntregaServico
-from produtos.produto import Produto, ProdutoDAO
-from vendas.venda import Venda, VendaDAO
-from vendas.vendaItem import VendaItem, VendaItemDAO
+from entidades.produto import Produto
+from entidades.venda import Venda
+from entidades.venda_item import VendaItem
+from persistencia.produto_dao import ProdutoDAO
+from persistencia.venda_dao import VendaDAO
+from persistencia.venda_item_dao import VendaItemDAO
 
 class CheckoutServico: # caso de uso: finalizar uma compra
 
