@@ -1,4 +1,5 @@
-from clientes.cliente import Cliente, ClienteDAO
+from entidades.cliente import Cliente
+from persistencia.cliente_dao import ClienteDAO
 
 
 class ClienteServico:  # caso de uso: manter cadastro de clientes

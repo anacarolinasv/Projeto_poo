@@ -1,4 +1,5 @@
-from entregadores.entregador import Entregador, EntregadorDAO
+from entidades.entregador import Entregador
+from persistencia.entregador_dao import EntregadorDAO
 from excecoes.excecoes import RegraNegocioError
 from util.validacao import validar_senha
 

@@ -1,4 +1,5 @@
-from categorias.categoria import Categoria, CategoriaDAO
+from entidades.categoria import Categoria
+from persistencia.categoria_dao import CategoriaDAO
 
 
 class CategoriaServico:  # caso de uso: manter cadastro de categorias

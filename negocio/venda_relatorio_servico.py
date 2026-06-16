@@ -1,6 +1,6 @@
-from vendas.venda import VendaDAO
-from vendas.vendaItem import VendaItemDAO
-from produtos.produto import ProdutoDAO
+from persistencia.venda_dao import VendaDAO
+from persistencia.venda_item_dao import VendaItemDAO
+from persistencia.produto_dao import ProdutoDAO
 
 class VendaRelatorioServico:  # caso de uso: montar vendas com itens
 

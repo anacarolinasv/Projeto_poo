@@ -1,4 +1,5 @@
-from produtos.produto import Produto, ProdutoDAO
+from entidades.produto import Produto
+from persistencia.produto_dao import ProdutoDAO
 from negocio.produto_foto_servico import ProdutoFotoServico
 
 
