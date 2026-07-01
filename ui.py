@@ -1,7 +1,7 @@
 from views import View
-from Templates.uiadmin import UIAdmin
-from Templates.uicliente import UICliente
-from Templates.estilo_terminal import (
+from apresentacao.admin.uiadmin import UIAdmin
+from apresentacao.cliente.uicliente import UICliente
+from apresentacao.comum.estilo_terminal import (
     aviso,
     banner_boas_vindas,
     erro,

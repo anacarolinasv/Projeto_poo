@@ -1,5 +1,5 @@
-from administradores.administrador import AdministradorDAO
-from clientes.cliente import ClienteDAO
+from persistencia.administrador_dao import AdministradorDAO
+from persistencia.cliente_dao import ClienteDAO
 from negocio.entregador_servico import EntregadorServico
 
 class AutenticacaoServico: # caso de uso: autenticar um administrador, cliente ou entregador

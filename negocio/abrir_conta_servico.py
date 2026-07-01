@@ -1,4 +1,5 @@
-from clientes.cliente import Cliente, ClienteDAO
+from entidades.cliente import Cliente
+from persistencia.cliente_dao import ClienteDAO
 
 class AbrirContaServico: # caso de uso: visitante abre conta para passar a ser cliente cadastrado
 

@@ -1,7 +1,8 @@
 from datetime import date
 
-from categorias.categoria import CategoriaDAO
-from promocoes.promocao import ID_CATEGORIA_TODAS, Promocao, PromocaoDAO
+from persistencia.categoria_dao import CategoriaDAO
+from entidades.promocao import ID_CATEGORIA_TODAS, Promocao
+from persistencia.promocao_dao import PromocaoDAO
 
 
 class PromocaoServico:

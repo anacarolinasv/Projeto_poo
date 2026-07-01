@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 class ProdutoFotoServico:
-    FOTOS_DIR = Path("produtos/fotos")
+    FOTOS_DIR = Path("midia/produtos")
     EXTENSOES = ("jpg", "jpeg", "png", "webp")
 
     def _garantir_dir(self):

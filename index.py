@@ -1,9 +1,9 @@
 import streamlit as st
 from views import View
-from Templates.login import LoginUI
-from Templates.loja_cliente import LojaClienteUI
-from Templates.admin_loja import AdminLojaUI
-from Templates.painel_entregador import PainelEntregadorUI
+from apresentacao.visitante.login import LoginUI
+from apresentacao.cliente.loja_cliente import LojaClienteUI
+from apresentacao.admin.admin_loja import AdminLojaUI
+from apresentacao.entregador.painel_entregador import PainelEntregadorUI
 
 
 st.set_page_config(
